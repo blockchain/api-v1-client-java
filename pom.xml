@@ -30,4 +30,29 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <build>
+	<!-- Package everything into a single .jar along with the dependencies -->
+  	<plugins>
+  		<plugin>
+		<artifactId>maven-assembly-plugin</artifactId>
+		<executions>
+		  <execution>
+			<phase>package</phase>
+			<goals>
+			  <goal>single</goal>
+			</goals>
+		  </execution>
+		</executions>
+		<configuration>
+		  <descriptorRefs>
+			<descriptorRef>jar-with-dependencies</descriptorRef>
+		  </descriptorRefs>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+       	  <appendAssemblyId>true</appendAssemblyId>
+		</configuration>
+	  </plugin>
+  	</plugins>
+  </build>
+  
 </project>

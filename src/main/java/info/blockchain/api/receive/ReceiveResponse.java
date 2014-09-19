@@ -1,7 +1,7 @@
 package info.blockchain.api.receive;
 
 /**
- * This class is used as a response object to the Receive.receive call. 
+ * This class is used as a response object to the `Receive.receive` method. 
  *
  */
 public class ReceiveResponse
@@ -20,18 +20,33 @@ public class ReceiveResponse
 		this.callbackUrl = callbackUrl;
 	}
 	
+	/**
+	 * @return Forwarding fee
+	 */
 	public int getFeePercent()
 	{
 		return feePercent;
 	}
+	
+	/**
+	 * @return Destination address where the funds will be forwarded
+	 */
 	public String getDestinationAddress()
 	{
 		return destinationAddress;
 	}
+	
+	/**
+	 * @return Input address where the funds should be sent
+	 */
 	public String getInputAddress()
 	{
 		return inputAddress;
 	}
+	
+	/** 
+	 * @return Callback URI that will be called upon payment
+	 */
 	public String getCallbackUrl()
 	{
 		return callbackUrl;

@@ -19,8 +19,7 @@ import java.util.Map.Entry;
  */
 public class HttpClient
 {
-	private static final String BASE_URL = "https://blockchain.info/api/";
-	//private static final String BASE_URL = "http://requestb.in/";
+	private static final String BASE_URL = "https://blockchain.info/";
 	
 	/**
 	 * Perform a GET request on a Blockchain.info API resource. 
