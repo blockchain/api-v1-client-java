@@ -37,7 +37,7 @@ public class Receive
 	 * 
 	 * @param receiving_address Destination address where the payment should be sent
 	 * @param callback_url Callback URI that will be called upon payment
-	 * @param apiCode Blockchain.info API code
+	 * @param apiCode Blockchain.info API code (optional, nullable)
 	 * @return An instance of the ReceiveResponse class
 	 * @throws APIException If the server returns an error
 	 * @throws IOException
