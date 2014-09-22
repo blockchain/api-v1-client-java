@@ -312,7 +312,7 @@ public class Wallet
 	}
 	
 	/**
-	 * Sets the Blockchain.info API code in order to bypass request limiting.
+	 * Sets the Blockchain.info API code
 	 * @param apiCode
 	 */
 	public void setApiCode(String apiCode)
