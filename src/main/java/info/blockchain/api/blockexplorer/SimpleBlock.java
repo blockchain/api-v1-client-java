@@ -1,5 +1,7 @@
 package info.blockchain.api.blockexplorer;
 
+import com.google.gson.JsonObject;
+
 /**
  * Simple representation of a block
  *
@@ -17,6 +19,14 @@ public class SimpleBlock
 		this.hash = hash;
 		this.time = time;
 		this.mainChain = mainChain;
+	}
+	
+	public SimpleBlock(JsonObject b)
+	{
+		this(	b.get("height").getAsLong(),
+				b.get("hash").getAsString(),
+				b.get("time").getAsLong(),
+				b.get("main_chain").getAsBoolean());
 	}
 
 	/**

@@ -210,4 +210,68 @@ public class BlockExplorer
 		
 		return transactions;
 	}
+	
+	/**
+	 * Gets a list of blocks mined today by all pools since 00:00 UTC.
+	 * @return A list of {@link SimpleBlock} objects
+	 * @throws APIException APIException If the server returns an error
+	 * @throws IOException
+	 */
+	public List<SimpleBlock> getBlocks() throws APIException, IOException
+	{
+		return getBlocks(null);
+	}
+	
+	/**
+	 * Gets a list of blocks mined on a specific day.
+	 * @param timestamp Unix timestamp (without milliseconds) that falls between
+	 * 00:00 UTC and 23:59 UTC of the desired day.
+	 * @return A list of {@link SimpleBlock} objects
+	 * @throws APIException
+	 * @throws IOException
+	 */
+	public List<SimpleBlock> getBlocks(long timestamp) throws APIException, IOException
+	{
+		return getBlocks(String.valueOf(timestamp * 1000));
+	}
+	
+	/**
+	 * Gets a list of recent blocks by a specific mining pool.
+	 * @param poolName Name of the mining pool
+	 * @return A list of {@link SimpleBlock} objects
+	 * @throws APIException If the server returns an error
+	 * @throws IOException
+	 */
+	public List<SimpleBlock> getBlocks(String poolName) throws APIException, IOException
+	{
+		List<SimpleBlock> blocks = new ArrayList<SimpleBlock>();
+		poolName = poolName == null ? "" : poolName;
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("format", "json");
+		if (apiCode != null)
+			params.put("api_code", apiCode);
+		
+		String response = HttpClient.get("blocks/" + poolName, params);
+		JsonObject blockList = new JsonParser().parse(response).getAsJsonObject();
+		
+		for (JsonElement blockElem : blockList.get("blocks").getAsJsonArray())
+		{
+			blocks.add(new SimpleBlock(blockElem.getAsJsonObject()));
+		}
+		
+		return blocks;
+	}
+	
+	public InventoryData getInventoryData(String hash) throws APIException, IOException
+	{
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("format", "json");
+		if (apiCode != null)
+			params.put("api_code", apiCode);
+		
+		String response = HttpClient.get("inv/" + hash, params);
+		JsonObject invObj = new JsonParser().parse(response).getAsJsonObject();
+		return new InventoryData(invObj);
+	}
 }
