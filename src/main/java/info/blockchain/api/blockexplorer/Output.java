@@ -12,18 +12,16 @@ public class Output
 	private long value;
 	private String address;
 	private long txIndex;
-	private int type;
 	private String script;
 	private boolean spent;
 	
-	public Output(int n, long value, String address, long txIndex, int type,
+	public Output(int n, long value, String address, long txIndex,
 			String script, boolean spent)
 	{
 		this.n = n;
 		this.value = value;
 		this.address = address;
 		this.txIndex = txIndex;
-		this.type = type;
 		this.script = script;
 		this.spent = spent;
 	}
@@ -39,7 +37,6 @@ public class Output
 				o.get("value").getAsLong(),
 				o.get("addr").getAsString(),
 				o.get("tx_index").getAsLong(),
-				o.get("type").getAsInt(),
 				o.get("script").getAsString(),
 				spent);
 	}
@@ -51,6 +48,7 @@ public class Output
 	{
 		return n;
 	}
+	
 	/**
 	 * @return Value of the output (in satoshi)
 	 */
@@ -58,6 +56,7 @@ public class Output
 	{
 		return value;
 	}
+	
 	/**
 	 * @return Address that the output belongs to
 	 */
@@ -65,6 +64,7 @@ public class Output
 	{
 		return address;
 	}
+	
 	/**
 	 * @return Transaction index
 	 */
@@ -72,13 +72,7 @@ public class Output
 	{
 		return txIndex;
 	}
-	/**
-	 * @return the type //TODO
-	 */
-	public int getType()
-	{
-		return type;
-	}
+	
 	/**
 	 * @return Output script
 	 */

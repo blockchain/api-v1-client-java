@@ -12,6 +12,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * This class reflects the functionality documented
+ * at https://blockchain.info/api/exchange_rates_api. It allows users to fetch the latest
+ * ticker data and convert amounts between BTC and fiat currencies.
+ */
 public class ExchangeRates
 {
 	/**

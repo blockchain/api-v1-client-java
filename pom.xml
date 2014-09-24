@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
 
   <name>api</name>
-  <url>http://maven.apache.org</url>
+  <url>http://blockchain.info/api</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

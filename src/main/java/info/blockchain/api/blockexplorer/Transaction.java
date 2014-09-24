@@ -79,7 +79,7 @@ public class Transaction
 		return doubleSpend;
 	}
 	/**
-	 * @return Block height of the parent block
+	 * @return Block height of the parent block. -1 for unconfirmed transactions.
 	 */
 	public long getBlockHeight()
 	{
@@ -93,7 +93,7 @@ public class Transaction
 		return time;
 	}
 	/**
-	 * @return the relayedBy
+	 * @return IP address that relayed the transaction
 	 */
 	public String getRelayedBy()
 	{
@@ -114,14 +114,14 @@ public class Transaction
 		return txIndex;
 	}
 	/**
-	 * @return Transaction version //TODO
+	 * @return Transaction format version
 	 */
 	public int getVersion()
 	{
 		return version;
 	}
 	/**
-	 * @return Size of the transaction
+	 * @return Serialized size of the transaction
 	 */
 	public long getSize()
 	{

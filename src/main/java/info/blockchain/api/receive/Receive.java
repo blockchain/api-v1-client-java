@@ -11,8 +11,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * This class reflects the functionality documented
- * at https://blockchain.info/api/api_receive
+ * This class reflects the functionality documented at at 
+ * https://blockchain.info/api/api_receive. It allows merchants to create forwarding 
+ * addresses and be notified upon payment.
  *
  */
 public class Receive

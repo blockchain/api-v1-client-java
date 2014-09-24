@@ -46,7 +46,7 @@ public class SimpleBlock
 	}
 	
 	/**
-	 * @return Timestamp
+	 * @return Block timestamp set by the miner
 	 */
 	public long getTime()
 	{

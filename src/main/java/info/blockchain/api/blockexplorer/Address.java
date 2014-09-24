@@ -43,8 +43,7 @@ public class Address
 		for (JsonElement txElem : a.get("txs").getAsJsonArray())
 		{
 			JsonObject addrObj = txElem.getAsJsonObject();
-			transactions.add(new Transaction(addrObj, 
-					addrObj.get("block_height").getAsLong(), false));
+			transactions.add(new Transaction(addrObj, -1, false));
 		}
 	}
 	

@@ -73,7 +73,7 @@ public class Block extends SimpleBlock
 	}
 	
 	/**
-	 * @return Block version
+	 * @return Block version as specified by the protocol
 	 */
 	public int getVersion()
 	{
@@ -97,7 +97,7 @@ public class Block extends SimpleBlock
 	}
 
 	/**
-	 * @return the bits //TODO
+	 * @return Representation of the difficulty target for this block
 	 */
 	public long getBits()
 	{
@@ -113,7 +113,7 @@ public class Block extends SimpleBlock
 	}
 
 	/**
-	 * @return Nonce
+	 * @return Block nonce
 	 */
 	public long getNonce()
 	{
@@ -121,7 +121,7 @@ public class Block extends SimpleBlock
 	}
 
 	/**
-	 * @return Size //TODO
+	 * @return Serialized size of this block
 	 */
 	public long getSize()
 	{
@@ -137,7 +137,7 @@ public class Block extends SimpleBlock
 	}
 
 	/**
-	 * @return the receivedTime // TODO
+	 * @return The time this block was received by Blockchain.info
 	 */
 	public long getReceivedTime()
 	{

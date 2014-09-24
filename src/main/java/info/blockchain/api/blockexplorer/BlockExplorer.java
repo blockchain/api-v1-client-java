@@ -104,7 +104,8 @@ public class BlockExplorer
 	}
 	
 	/**
-	 * Gets a list of blocks at the specified height.
+	 * Gets a list of blocks at the specified height. Normally, only one block will be 
+	 * returned, but in case of a chain fork, multiple blocks may be present.
 	 * @param height Block height
 	 * @return A list of blocks at the specified height
 	 * @throws APIException If the server returns an error
@@ -263,6 +264,13 @@ public class BlockExplorer
 		return blocks;
 	}
 	
+	/**
+	 * Gets inventory data for a transaction.
+	 * @param hash Transaction hash
+	 * @return An instance of the {@link InventoryData} class
+	 * @throws APIException If the server returns an error
+	 * @throws IOException
+	 */
 	public InventoryData getInventoryData(String hash) throws APIException, IOException
 	{
 		Map<String, String> params = new HashMap<String, String>();

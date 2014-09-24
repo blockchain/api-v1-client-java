@@ -1,7 +1,9 @@
 package info.blockchain.api.blockexplorer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
@@ -11,8 +13,8 @@ import com.google.gson.JsonObject;
 public class InventoryData
 {
 	private String hash;
-	private String type;
 	private long initialTime;
+	private long lastTime;
 	private String initialIP;
 	private int nConnected;
 	private int relayedCount;
@@ -20,13 +22,13 @@ public class InventoryData
 	private List<Owner> probableOwners;
 	private List<MiningNode> miningNodes;
 	
-	public InventoryData(String hash, String type, long initialTime, String initialIP,
+	public InventoryData(String hash, long initialTime, long lastTime, String initialIP,
 			int nConnected, int relayedCount, int relayedPercent,
 			List<Owner> probableOwners, List<MiningNode> miningNodes)
 	{
 		this.hash = hash;
-		this.type = type;
 		this.initialTime = initialTime;
+		this.lastTime = lastTime;
 		this.initialIP = initialIP;
 		this.nConnected = nConnected;
 		this.relayedCount = relayedCount;
@@ -37,23 +39,37 @@ public class InventoryData
 
 	public InventoryData(JsonObject i)
 	{
+		this (	i.get("hash").getAsString(),
+				i.get("initial_time").getAsLong(),
+				i.get("last_time").getAsLong(),
+				i.get("initial_ip").getAsString(),
+				i.get("nconnected").getAsInt(),
+				i.get("relayed_count").getAsInt(),
+				i.get("relayed_percent").getAsInt(),
+				new ArrayList<Owner>(),
+				new ArrayList<MiningNode>());
 		
+		for (JsonElement jsonOwner : i.get("probable_owners").getAsJsonArray())
+		{
+			JsonObject ownerObj = jsonOwner.getAsJsonObject();
+			probableOwners.add(new Owner(ownerObj.get("ip").getAsString(),
+					ownerObj.get("confidence").getAsInt()));
+		}
+		
+		for (JsonElement jsonNode : i.get("mining_nodes").getAsJsonArray())
+		{
+			JsonObject nodeObj = jsonNode.getAsJsonObject();
+			miningNodes.add(new MiningNode(nodeObj.get("link").getAsString(),
+					nodeObj.get("name").getAsString()));
+		}
 	}
 	
 	/**
-	 * @return the hash
+	 * @return Transaction hash
 	 */
 	public String getHash()
 	{
 		return hash;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public String getType()
-	{
-		return type;
 	}
 
 	/**
@@ -62,6 +78,14 @@ public class InventoryData
 	public long getInitialTime()
 	{
 		return initialTime;
+	}
+
+	/**
+	 * @return
+	 */
+	public long getLastTime()
+	{
+		return lastTime;
 	}
 
 	/**
@@ -124,14 +148,14 @@ public class InventoryData
 		}
 		
 		/**
-		 * @return the ip
+		 * @return IP address of the potential owner
 		 */
 		public String getIp()
 		{
 			return ip;
 		}
 		/**
-		 * @return the confidence
+		 * @return Confidence that the transaction belongs to this owner
 		 */
 		public int getConfidence()
 		{
@@ -151,7 +175,7 @@ public class InventoryData
 		}
 
 		/**
-		 * @return the link
+		 * @return Link to the mining pool
 		 */
 		public String getLink()
 		{
@@ -159,7 +183,7 @@ public class InventoryData
 		}
 
 		/**
-		 * @return the name
+		 * @return Name of the mining pool
 		 */
 		public String getName()
 		{
