@@ -1,6 +1,6 @@
 ##`info.blockchain.api.exchangerates` package
 
-The `exchangerates` package contains the `CreateWallet` class that reflects the functionality documented at https://blockchain.info/api/create_wallet. It allows users to create new wallets as long as their API code has the 'generate wallet' permission.
+The `exchangerates` package contains the `ExchangeRates` class that reflects the functionality documented at https://blockchain.info/api/exchange_rates_api. It allows users to get price tickers for most major currencies and directly convert fiat amounts to BTC.
 
 Example usage:
 

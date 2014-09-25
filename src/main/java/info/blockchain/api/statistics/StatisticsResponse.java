@@ -13,27 +13,24 @@ public class StatisticsResponse
 {
 	private double tradeVolumeBTC;
 	private double tradeVolumeUSD;
-	private double electricityConsumption;
-	private double electricityCostUSD;
 	private double minersRevenueBTC;
 	private double minersRevenueUSD;
-	private double minersOperatingMargin;
 	private double marketPriceUSD;
 	private double estimatedTransactionVolumeUSD;
 	private double totalFeesBTC;
 	private long totalBTCSent;
 	private double estimatedBTCSent;
-	private double nBTCMined;
+	private double btcMined;
 	private double difficulty;
 	private double minutesBetweenBlocks;
 	private double daysDestroyed;
 	private long nTx;
 	private double hashRate;
 	private long timestamp;
-	private int nBlocksMined;
+	private long minedBlocks;
 	private long blocksSize;
-	private int totalBTC;
-	private long nBlocksTotal;
+	private long totalBTC;
+	private long totalBlocks;
 	private long nextRetarget;
 	
 	public StatisticsResponse(String jsonString)
@@ -42,17 +39,14 @@ public class StatisticsResponse
 		
 		this.tradeVolumeBTC = s.get("trade_volume_btc").getAsDouble();
 		this.tradeVolumeUSD = s.get("trade_volume_usd").getAsDouble();
-		this.electricityConsumption = s.get("electricity_consumption").getAsDouble();
-		this.electricityCostUSD = s.get("electricity_cost_usd").getAsDouble();
 		this.minersRevenueBTC = s.get("miners_revenue_btc").getAsDouble();
 		this.minersRevenueUSD = s.get("miners_revenue_usd").getAsDouble();
-		this.minersOperatingMargin = s.get("miners_operating_margin").getAsDouble();
 		this.marketPriceUSD = s.get("market_price_usd").getAsDouble();
 		this.estimatedTransactionVolumeUSD = s.get("estimated_transaction_volume_usd").getAsDouble();
 		this.totalFeesBTC = s.get("total_fees_btc").getAsDouble();
 		this.totalBTCSent = s.get("total_btc_sent").getAsLong() / Util.SATOSHI_IN_BTC;
 		this.estimatedBTCSent = s.get("estimated_btc_sent").getAsDouble();
-		this.nBTCMined = s.get("n_btc_mined").getAsDouble();
+		this.btcMined = s.get("n_btc_mined").getAsDouble();
 		this.tradeVolumeUSD = s.get("trade_volume_usd").getAsDouble();
 		this.difficulty = s.get("difficulty").getAsDouble();
 		this.minutesBetweenBlocks = s.get("minutes_between_blocks").getAsDouble();
@@ -60,152 +54,131 @@ public class StatisticsResponse
 		this.nTx = s.get("n_tx").getAsLong();
 		this.hashRate = s.get("hash_rate").getAsDouble();
 		this.timestamp = s.get("timestamp").getAsLong();
-		this.nBlocksMined = s.get("n_blocks_mined").getAsInt();
+		this.minedBlocks = s.get("n_blocks_mined").getAsLong();
 		this.blocksSize = s.get("blocks_size").getAsLong();
-		this.totalBTC = (int) (s.get("totalbc").getAsLong() / Util.SATOSHI_IN_BTC);
-		this.nBlocksTotal = s.get("n_blocks_total").getAsLong();
+		this.totalBTC = s.get("totalbc").getAsLong();
+		this.totalBlocks = s.get("n_blocks_total").getAsLong();
 		this.nextRetarget = s.get("nextretarget").getAsLong();
 	}
 	
 	/**
-	 * @return the tradeVolumeBTC
+	 * @return Trade volume in the past 24 hours
 	 */
 	public double getTradeVolumeBTC()
 	{
 		return tradeVolumeBTC;
 	}
 	/**
-	 * @return the tradeVolumeUSD
+	 * @return Trade volume in the past 24 hours
 	 */
 	public double getTradeVolumeUSD()
 	{
 		return tradeVolumeUSD;
 	}
 	/**
-	 * @return the electricityConsumption
-	 */
-	public double getElectricityConsumption()
-	{
-		return electricityConsumption;
-	}
-	/**
-	 * @return the electricityCostUSD
-	 */
-	public double getElectricityCostUSD()
-	{
-		return electricityCostUSD;
-	}
-	/**
-	 * @return the minersRevenueBTC
+	 * @return Miners' revenue in BTC
 	 */
 	public double getMinersRevenueBTC()
 	{
 		return minersRevenueBTC;
 	}
 	/**
-	 * @return the minersRevenueUSD
+	 * @return Miners' revenue in USD
 	 */
 	public double getMinersRevenueUSD()
 	{
 		return minersRevenueUSD;
 	}
 	/**
-	 * @return the minersOperatingMargin
-	 */
-	public double getMinersOperatingMargin()
-	{
-		return minersOperatingMargin;
-	}
-	/**
-	 * @return the marketPriceUSD
+	 * @return Current market price in USD
 	 */
 	public double getMarketPriceUSD()
 	{
 		return marketPriceUSD;
 	}
 	/**
-	 * @return the estimatedTransactionVolumeUSD
+	 * @return Estimated transaction volume in the past 24 hours
 	 */
 	public double getEstimatedTransactionVolumeUSD()
 	{
 		return estimatedTransactionVolumeUSD;
 	}
 	/**
-	 * @return the totalFeesBTC
+	 * @return Total fees in the past 24 hours
 	 */
 	public double getTotalFeesBTC()
 	{
 		return totalFeesBTC;
 	}
 	/**
-	 * @return the totalBTCSent
+	 * @return Total BTC sent in the past 24 hours
 	 */
 	public long getTotalBTCSent()
 	{
 		return totalBTCSent;
 	}
 	/**
-	 * @return the estimatedBTCSent
+	 * @return Estimated BTC sent in the past 24 hours
 	 */
 	public double getEstimatedBTCSent()
 	{
 		return estimatedBTCSent;
 	}
 	/**
-	 * @return the nBTCMined
+	 * @return Number of BTC mined in the past 24 hours
 	 */
-	public double getnBTCMined()
+	public double getBTCMined()
 	{
-		return nBTCMined;
+		return btcMined;
 	}
 	/**
-	 * @return the difficulty
+	 * @return Current difficulty
 	 */
 	public double getDifficulty()
 	{
 		return difficulty;
 	}
 	/**
-	 * @return the minutesBetweenBlocks
+	 * @return Minutes between blocks
 	 */
 	public double getMinutesBetweenBlocks()
 	{
 		return minutesBetweenBlocks;
 	}
 	/**
-	 * @return the daysDestroyed
+	 * @return Days destroyed in the past 24 hours
 	 */
 	public double getDaysDestroyed()
 	{
 		return daysDestroyed;
 	}
 	/**
-	 * @return the nTx
+	 * @return Number of transactions in the past 24 hours
 	 */
-	public long getnTx()
+	public long getNTx()
 	{
 		return nTx;
 	}
 	/**
-	 * @return the hashRate
+	 * @return Current hashrate in GH/s
 	 */
 	public double getHashRate()
 	{
 		return hashRate;
 	}
 	/**
-	 * @return the timestamp
+	 * @return Timestamp of when the report was compiled (in ms)
 	 */
 	public long getTimestamp()
 	{
 		return timestamp;
 	}
 	/**
-	 * @return the nBlocksMined
+	 * @return Number of blocks mined in the past 24 hours
 	 */
-	public int getnBlocksMined()
+	public long getMinedBlocks()
 	{
-		return nBlocksMined;
+		return minedBlocks;
 	}
 	/**
 	 * @return the blocksSize
@@ -215,21 +188,21 @@ public class StatisticsResponse
 		return blocksSize;
 	}
 	/**
-	 * @return the totalBTC
+	 * @return Total BTC in existence (in satoshi)
 	 */
 	public long getTotalBTC()
 	{
 		return totalBTC;
 	}
 	/**
-	 * @return the nBlocksTotal
+	 * @return Total number of blocks in existence
 	 */
-	public long getnBlocksTotal()
+	public long getTotalBlocks()
 	{
-		return nBlocksTotal;
+		return totalBlocks;
 	}
 	/**
-	 * @return the nextRetarget
+	 * @return The next block where the difficulty retarget will occur
 	 */
 	public long getNextRetarget()
 	{

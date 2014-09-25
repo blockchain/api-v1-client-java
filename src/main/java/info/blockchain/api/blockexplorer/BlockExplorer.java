@@ -265,8 +265,8 @@ public class BlockExplorer
 	}
 	
 	/**
-	 * Gets inventory data for a transaction.
-	 * @param hash Transaction hash
+	 * Gets inventory data for an object.
+	 * @param hash Object hash
 	 * @return An instance of the {@link InventoryData} class
 	 * @throws APIException If the server returns an error
 	 * @throws IOException
