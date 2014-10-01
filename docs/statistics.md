@@ -13,7 +13,7 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {	
-    	StatisticsResponse stats = Statistics.getStats();
+    	StatisticsResponse stats = Statistics.get();
     	
     	System.out.println(String.format("The current difficulty is %s. "
     			+ "The next retarget will happen in %s hours.",

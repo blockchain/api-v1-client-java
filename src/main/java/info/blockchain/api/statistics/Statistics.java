@@ -20,10 +20,10 @@ public class Statistics
 	 * @throws APIException If the server returns an error
 	 * @throws IOException
 	 */
-	public static StatisticsResponse getStats()
+	public static StatisticsResponse get()
 			throws APIException, IOException
 	{
-		return getStats(null);
+		return get(null);
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class Statistics
 	 * @throws APIException If the server returns an error
 	 * @throws IOException
 	 */
-	public static StatisticsResponse getStats(String apiCode)
+	public static StatisticsResponse get(String apiCode)
 			throws APIException, IOException
 	{
 		Map<String, String> params = new HashMap<String, String>();
