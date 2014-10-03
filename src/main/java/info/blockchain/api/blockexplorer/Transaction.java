@@ -17,14 +17,14 @@ public class Transaction
 	private long time;
 	private String relayedBy;
 	private String hash;
-	private long txIndex;
+	private long index;
 	private int version;
 	private long size;
 	private List<Input> inputs;
 	private List<Output> outputs;
 	
 	public Transaction(boolean doubleSpend, long blockHeight, long time,
-			String relayedBy, String hash, long txIndex, int version,
+			String relayedBy, String hash, long index, int version,
 			long size, List<Input> inputs, List<Output> outputs)
 	{
 		this.doubleSpend = doubleSpend;
@@ -32,7 +32,7 @@ public class Transaction
 		this.time = time;
 		this.relayedBy = relayedBy;
 		this.hash = hash;
-		this.txIndex = txIndex;
+		this.index = index;
 		this.version = version;
 		this.size = size;
 		this.inputs = inputs;
@@ -109,9 +109,9 @@ public class Transaction
 	/**
 	 * @return Transaction index
 	 */
-	public long getTxIndex()
+	public long getIndex()
 	{
-		return txIndex;
+		return index;
 	}
 	/**
 	 * @return Transaction format version

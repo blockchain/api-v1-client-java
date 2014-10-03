@@ -159,6 +159,8 @@ public class BlockExplorer
 			// a legitimate situation. We are circumventing that by returning an empty list
 			if (e.getMessage().equals("No free outputs to spend"))
 				return outputs;
+			else
+				throw e;
 		}
 		
 		JsonObject outsJson = new JsonParser().parse(response).getAsJsonObject();

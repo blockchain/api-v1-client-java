@@ -105,7 +105,7 @@ public class Block extends SimpleBlock
 	}
 
 	/**
-	 * @return Total transaction fees from this block
+	 * @return Total transaction fees from this block (in satoshi)
 	 */
 	public long getFees()
 	{
