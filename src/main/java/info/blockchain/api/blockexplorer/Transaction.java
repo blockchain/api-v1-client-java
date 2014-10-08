@@ -41,7 +41,8 @@ public class Transaction
 	
 	public Transaction(JsonObject t)
 	{
-		this(t, t.get("block_height").getAsLong(),
+		this(t, t.get("block_height") != null ? 
+				t.get("block_height").getAsLong() : -1,
 				t.get("double_spend").getAsBoolean());
 	}
 	

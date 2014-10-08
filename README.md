@@ -4,13 +4,38 @@ An official Java library for interacting with the Blockchain.info API.
 
 ###Getting started
 
+If you prefer building from source:
+
 ```
 $ git clone https://github.com/blockchain/api-v1-client-java
 $ cd api-v1-client-java
 $ mvn install
 ```
 
-Note that the above process requires Maven. If you do not wish to use Maven, please compile the source manually.
+We also provide a snapshot Maven repository for users who prefer managing dependencies that way.
+
+Add the following repository to your pom.xml:
+```xml
+    <repository>
+        <id>api-v1-client-java-mvn-repo</id>
+        <url>https://raw.githubusercontent.com/blockchain/api-v1-client-java/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+```
+
+Add the following dependency to your pom.xml:
+```xml
+  <dependency>
+  	<groupId>info.blockchain</groupId>
+  	<artifactId>api</artifactId>
+  	<version>1.0.1</version> <!-- for the latest version see the latest project tag -->
+  </dependency>
+```
+
+Note that the above procedures require Maven. If you do not wish to use Maven, please compile the source manually.
 
 The library consists of the following packages:
 
