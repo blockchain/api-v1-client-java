@@ -21,6 +21,8 @@ public class HttpClient
 {
 	private static final String BASE_URL = "https://blockchain.info/";
 	
+	public volatile static int TIMEOUT_MS = 10000;
+	
 	/**
 	 * Perform a GET request on a Blockchain.info API resource. 
 	 * @param resource Resource path after https://blockchain.info/api/
@@ -70,6 +72,7 @@ public class HttpClient
 		{
 			conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod(requestMethod);
+			conn.setConnectTimeout(TIMEOUT_MS);
 			
 			if (requestMethod.equals("POST"))
 			{

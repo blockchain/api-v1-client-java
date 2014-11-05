@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * This class reflects the functionality documented at at 
+ * This class reflects the functionality documented at 
  * https://blockchain.info/api/api_receive. It allows merchants to create forwarding 
  * addresses and be notified upon payment.
  *
@@ -21,34 +21,34 @@ public class Receive
 	/**
 	 * Calls the 'api/receive' endpoint and creates a forwarding address.
 	 * 
-	 * @param receiving_address Destination address where the payment should be sent
-	 * @param callback_url Callback URI that will be called upon payment
+	 * @param receivingAddress Destination address where the payment should be sent
+	 * @param callbackUrl Callback URI that will be called upon payment
 	 * @return An instance of the ReceiveResponse class
 	 * @throws APIException If the server returns an error
 	 * @throws IOException
 	 */
-	public static ReceiveResponse receive(String receiving_address, String callback_url)
+	public static ReceiveResponse receive(String receivingAddress, String callbackUrl)
 			throws APIException, IOException
 	{
-		return receive(receiving_address, callback_url, null);
+		return receive(receivingAddress, callbackUrl, null);
 	}
 	
 	/**
 	 * Calls the 'api/receive' endpoint and creates a forwarding address.
 	 * 
-	 * @param receiving_address Destination address where the payment should be sent
-	 * @param callback_url Callback URI that will be called upon payment
+	 * @param receivingAddress Destination address where the payment should be sent
+	 * @param callbackUrl Callback URI that will be called upon payment
 	 * @param apiCode Blockchain.info API code (optional, nullable)
 	 * @return An instance of the ReceiveResponse class
 	 * @throws APIException If the server returns an error
 	 * @throws IOException
 	 */
-	public static ReceiveResponse receive(String receiving_address, String callback_url,
+	public static ReceiveResponse receive(String receivingAddress, String callbackUrl,
 			String apiCode) throws APIException, IOException
 	{
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("address", receiving_address);
-		params.put("callback", callback_url);
+		params.put("address", receivingAddress);
+		params.put("callback", callbackUrl);
 		params.put("method", "create");
 		
 		if (apiCode != null)

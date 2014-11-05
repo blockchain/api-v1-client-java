@@ -31,7 +31,7 @@ Add the following dependency to your pom.xml:
   <dependency>
   	<groupId>info.blockchain</groupId>
   	<artifactId>api</artifactId>
-  	<version>1.0.1</version> <!-- for the latest version see the latest project tag -->
+  	<version>LATEST</version> <!-- for a specific version see the list of tags -->
   </dependency>
 ```
 
@@ -42,6 +42,7 @@ The library consists of the following packages:
 * `info.blockchain.api.blockexplorer` ([docs](docs/blockexplorer.md)) ([api/blockchain_api][api1])
 * `info.blockchain.api.createwallet` ([docs](docs/createwallet.md)) ([api/create_wallet][api2])
 * `info.blockchain.api.exchangerates` ([docs](docs/exchangerates.md)) ([api/exchange\_rates\_api][api3])
+* `info.blockchain.api.pushtx` ([docs](docs/pushtx.md)) ([pushtx][api7])
 * `info.blockchain.api.receive` ([docs](docs/receive.md)) ([api/api_receive][api4])
 * `info.blockchain.api.statistics` ([docs](docs/statistics.md)) ([api/charts_api][api5])
 * `info.blockchain.api.wallet` ([docs](docs/wallet.md)) ([api/blockchain\_wallet\_api][api6])
@@ -49,6 +50,14 @@ The library consists of the following packages:
 ###Error handling
 
 All methods may throw exceptions caused by incorrectly passed parameters or other problems. If a call is rejected server-side, the `APIException` exception will be thrpwn. In case of a network error, the `IOException` exception will be thrown.
+
+###Connection timeouts
+
+It is possible to set arbitrary connection timeouts.
+
+```java
+info.blockchain.api.HttpClient.TIMEOUT_MS = 2000; // time out after 2000 milliseconds
+```
 
 ###Request limits and API keys
 
@@ -62,3 +71,4 @@ The same API key can be used to bypass the request limiter.
 [api4]: https://blockchain.info/api/api_receive
 [api5]: https://blockchain.info/api/charts_api
 [api6]: https://blockchain.info/api/blockchain_wallet_api
+[api7]: https://blockchain.info/pushtx
