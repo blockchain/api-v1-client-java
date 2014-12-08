@@ -21,6 +21,7 @@ public class App
     	System.out.println(String.format("The balance is %s", addr.getBalance()));
     	
     	// send 0.2 bitcoins with a custom fee of 0.01 BTC and a note
+        // public notes require a minimum transaction size of 0.005 BTC
     	PaymentResponse payment = wallet.send("1dice6YgEVBf88erBFra9BHf6ZMoyvG88", 20000000L, null, 1000000L, "Amazon payment");
     	System.out.println(String.format("The payment TX hash is %s", payment.getTxHash()));
     	
