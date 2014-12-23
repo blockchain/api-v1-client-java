@@ -21,7 +21,6 @@ public class StatisticsResponse
 	private long btcMined;
 	private double difficulty;
 	private double minutesBetweenBlocks;
-	private double daysDestroyed;
 	private long numberOfTransactions;
 	private double hashRate;
 	private long timestamp;
@@ -47,7 +46,6 @@ public class StatisticsResponse
 		this.btcMined = s.get("n_btc_mined").getAsLong();
 		this.difficulty = s.get("difficulty").getAsDouble();
 		this.minutesBetweenBlocks = s.get("minutes_between_blocks").getAsDouble();
-		this.daysDestroyed = s.get("days_destroyed").getAsDouble();
 		this.numberOfTransactions = s.get("n_tx").getAsLong();
 		this.hashRate = s.get("hash_rate").getAsDouble();
 		this.timestamp = s.get("timestamp").getAsLong();
@@ -141,13 +139,6 @@ public class StatisticsResponse
 	public double getMinutesBetweenBlocks()
 	{
 		return minutesBetweenBlocks;
-	}
-	/**
-	 * @return Days destroyed in the past 24 hours
-	 */
-	public double getDaysDestroyed()
-	{
-		return daysDestroyed;
 	}
 	/**
 	 * @return Number of transactions in the past 24 hours
