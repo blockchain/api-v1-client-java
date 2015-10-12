@@ -10,38 +10,33 @@ import java.util.Map;
 /**
  * This class reflects the functionality documented
  * at https://blockchain.info/api/charts_api
- *
  */
-public class Statistics
-{
+public class Statistics {
 	/**
 	 * Gets the network statistics.
+	 *
 	 * @return An instance of the StatisticsResponse class
 	 * @throws APIException If the server returns an error
-	 * @throws IOException
 	 */
-	public static StatisticsResponse get()
-			throws APIException, IOException
-	{
+	public static StatisticsResponse get () throws APIException, IOException {
 		return get(null);
 	}
-	
+
 	/**
 	 * Gets the network statistics.
+	 *
 	 * @param apiCode Blockchain.info API code (optional, nullable)
 	 * @return An instance of the StatisticsResponse class
 	 * @throws APIException If the server returns an error
-	 * @throws IOException
 	 */
-	public static StatisticsResponse get(String apiCode)
-			throws APIException, IOException
-	{
+	public static StatisticsResponse get (String apiCode) throws APIException, IOException {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("format", "json");
-		if (apiCode != null)
+		if (apiCode != null) {
 			params.put("api_code", apiCode);
-		
-		String response = HttpClient.get("stats", params);
+		}
+
+		String response = HttpClient.getInstance().get("stats", params);
 		return new StatisticsResponse(response);
 	}
 }
