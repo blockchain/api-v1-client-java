@@ -1,14 +1,13 @@
 package info.blockchain.api.createwallet;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import info.blockchain.api.APIException;
+import info.blockchain.api.HttpClient;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import info.blockchain.api.APIException;
-import info.blockchain.api.HttpClient;
 
 /**
  * This class reflects the functionality documented
@@ -58,7 +57,7 @@ public class CreateWallet
 		if (email != null)
 			params.put("email", email);
 	
-		String response = HttpClient.post("api/v2/create_wallet", params);
+		String response = HttpClient.getInstance().post("api/v2/create_wallet", params);
 		JsonObject jsonObj = new JsonParser()
 								.parse(response)
 								.getAsJsonObject();

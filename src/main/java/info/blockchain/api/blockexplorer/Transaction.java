@@ -43,7 +43,7 @@ public class Transaction
 	{
 		this(t, t.has("block_height") ?
 				t.get("block_height").getAsLong() : -1,
-				t.get("double_spend").getAsBoolean());
+				t.has("double_spend") ? t.get("double_spend").getAsBoolean() : false);
 	}
 	
 	public Transaction(JsonObject t, long blockHeight, boolean doubleSpend)

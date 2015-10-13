@@ -3,18 +3,20 @@ package info.blockchain.api.statistics;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.math.BigDecimal;
+
 /**
  * This class is used as a response object to the 'get' method in the 'Statistics' class
  *
  */
 public class StatisticsResponse
 {
-	private double tradeVolumeBTC;
-	private double tradeVolumeUSD;
-	private double minersRevenueBTC;
-	private double minersRevenueUSD;
-	private double marketPriceUSD;
-	private double estimatedTransactionVolumeUSD;
+	private BigDecimal tradeVolumeBTC;
+	private BigDecimal tradeVolumeUSD;
+	private BigDecimal minersRevenueBTC;
+	private BigDecimal minersRevenueUSD;
+	private BigDecimal marketPriceUSD;
+	private BigDecimal estimatedTransactionVolumeUSD;
 	private long totalFeesBTC;
 	private long totalBTCSent;
 	private long estimatedBTCSent;
@@ -34,12 +36,12 @@ public class StatisticsResponse
 	{
 		JsonObject s = new JsonParser().parse(jsonString).getAsJsonObject();
 		
-		this.tradeVolumeBTC = s.get("trade_volume_btc").getAsDouble();
-		this.tradeVolumeUSD = s.get("trade_volume_usd").getAsDouble();
-		this.minersRevenueBTC = s.get("miners_revenue_btc").getAsDouble();
-		this.minersRevenueUSD = s.get("miners_revenue_usd").getAsDouble();
-		this.marketPriceUSD = s.get("market_price_usd").getAsDouble();
-		this.estimatedTransactionVolumeUSD = s.get("estimated_transaction_volume_usd").getAsDouble();
+		this.tradeVolumeBTC = new BigDecimal(s.get("trade_volume_btc").getAsString());
+		this.tradeVolumeUSD = new BigDecimal(s.get("trade_volume_usd").getAsString());
+		this.minersRevenueBTC = new BigDecimal(s.get("miners_revenue_btc").getAsString());
+		this.minersRevenueUSD = new BigDecimal(s.get("miners_revenue_usd").getAsString());
+		this.marketPriceUSD = new BigDecimal(s.get("market_price_usd").getAsString());
+		this.estimatedTransactionVolumeUSD = new BigDecimal(s.get("estimated_transaction_volume_usd").getAsString());
 		this.totalFeesBTC = s.get("total_fees_btc").getAsLong();
 		this.totalBTCSent = s.get("total_btc_sent").getAsLong();
 		this.estimatedBTCSent = s.get("estimated_btc_sent").getAsLong();
@@ -59,42 +61,42 @@ public class StatisticsResponse
 	/**
 	 * @return Trade volume in the past 24 hours
 	 */
-	public double getTradeVolumeBTC()
+	public BigDecimal getTradeVolumeBTC()
 	{
 		return tradeVolumeBTC;
 	}
 	/**
 	 * @return Trade volume in the past 24 hours
 	 */
-	public double getTradeVolumeUSD()
+	public BigDecimal getTradeVolumeUSD()
 	{
 		return tradeVolumeUSD;
 	}
 	/**
 	 * @return Miners' revenue in BTC
 	 */
-	public double getMinersRevenueBTC()
+	public BigDecimal getMinersRevenueBTC()
 	{
 		return minersRevenueBTC;
 	}
 	/**
 	 * @return Miners' revenue in USD
 	 */
-	public double getMinersRevenueUSD()
+	public BigDecimal getMinersRevenueUSD()
 	{
 		return minersRevenueUSD;
 	}
 	/**
 	 * @return Current market price in USD
 	 */
-	public double getMarketPriceUSD()
+	public BigDecimal getMarketPriceUSD()
 	{
 		return marketPriceUSD;
 	}
 	/**
 	 * @return Estimated transaction volume in the past 24 hours
 	 */
-	public double getEstimatedTransactionVolumeUSD()
+	public BigDecimal getEstimatedTransactionVolumeUSD()
 	{
 		return estimatedTransactionVolumeUSD;
 	}

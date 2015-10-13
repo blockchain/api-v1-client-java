@@ -7,6 +7,7 @@ import info.blockchain.api.APIException;
 import info.blockchain.api.HttpClient;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -65,7 +66,7 @@ public class ExchangeRates {
 	 * @return Converted value in BTC
 	 * @throws APIException If the server returns an error
 	 */
-	public static double toBTC (String currency, double value) throws APIException, IOException {
+	public static BigDecimal toBTC (String currency, BigDecimal value) throws APIException, IOException {
 		return toBTC(currency, value, null);
 	}
 
@@ -78,7 +79,7 @@ public class ExchangeRates {
 	 * @return Converted value in BTC
 	 * @throws APIException If the server returns an error
 	 */
-	public static double toBTC (String currency, double value, String apiCode) throws APIException, IOException {
+	public static BigDecimal toBTC (String currency, BigDecimal value, String apiCode) throws APIException, IOException {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("currency", currency);
 		params.put("value", String.valueOf(value));
@@ -87,6 +88,6 @@ public class ExchangeRates {
 		}
 
 		String response = HttpClient.getInstance().get("tobtc", params);
-		return Double.parseDouble(response);
+		return new BigDecimal(response);
 	}
 }

@@ -41,6 +41,6 @@ public class PushTx
 		if (apiCode != null)
 			params.put("api_code", apiCode);
 		
-		HttpClient.post("pushtx", params);
+		HttpClient.getInstance().post("pushtx", params);
 	}
 }

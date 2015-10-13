@@ -1,14 +1,13 @@
 package info.blockchain.api.receive;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import info.blockchain.api.APIException;
 import info.blockchain.api.HttpClient;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * This class reflects the functionality documented at 
@@ -54,7 +53,7 @@ public class Receive
 		if (apiCode != null)
 			params.put("api_code", apiCode);
 		
-		String response = HttpClient.post("api/receive", params);
+		String response = HttpClient.getInstance().post("api/receive", params);
 		JsonParser parser = new JsonParser();
 		JsonObject obj = parser.parse(response).getAsJsonObject();
 		
