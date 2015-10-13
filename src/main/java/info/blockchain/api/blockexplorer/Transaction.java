@@ -1,10 +1,10 @@
 package info.blockchain.api.blockexplorer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a transaction.
@@ -41,7 +41,7 @@ public class Transaction
 	
 	public Transaction(JsonObject t)
 	{
-		this(t, t.get("block_height") != null ? 
+		this(t, t.has("block_height") ?
 				t.get("block_height").getAsLong() : -1,
 				t.get("double_spend").getAsBoolean());
 	}
