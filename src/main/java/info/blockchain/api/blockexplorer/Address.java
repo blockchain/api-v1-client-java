@@ -1,10 +1,10 @@
 package info.blockchain.api.blockexplorer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representation of an address.
@@ -32,18 +32,21 @@ public class Address
 	
 	public Address(JsonObject a)
 	{
-		this(	a.get("hash160").getAsString(),
-				a.get("address").getAsString(),
-				a.get("total_received").getAsLong(),
-				a.get("total_sent").getAsLong(),
-				a.get("final_balance").getAsLong(),
+
+
+
+		this(	a.has("hash160") ? a.get("hash160").getAsString() : "",
+				a.has("address") ? a.get("address").getAsString() : "",
+				a.has("total_received") ? a.get("total_received").getAsLong() : 0,
+				a.has("total_sent") ? a.get("total_sent").getAsLong() : 0,
+				a.has("final_balance") ? a.get("final_balance").getAsLong() : 0,
 				null);
 		
 		transactions = new ArrayList<Transaction>();
 		for (JsonElement txElem : a.get("txs").getAsJsonArray())
 		{
 			JsonObject addrObj = txElem.getAsJsonObject();
-			transactions.add(new Transaction(addrObj, -1, false));
+			transactions.add(new Transaction(addrObj));
 		}
 	}
 	
