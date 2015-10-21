@@ -17,6 +17,16 @@ public class PaymentResponse
 		this.notice = notice;
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof PaymentResponse) {
+            PaymentResponse that = (PaymentResponse) o;
+            return (this.getMessage().equals(that.getMessage()) && this.getTxHash().equals(that.getTxHash()) && this.getNotice().equals(that.getNotice()));
+        }
+        return false;
+    }
+
 	/**
 	 * @return Response message from the server
 	 */

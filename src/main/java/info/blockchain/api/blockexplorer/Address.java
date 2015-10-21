@@ -49,6 +49,16 @@ public class Address
 			transactions.add(new Transaction(addrObj));
 		}
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Address) {
+            Address that = (Address) o;
+            return (this.getAddress().equals(that.getAddress()));
+        }
+        return false;
+    }
 	
 	/**
 	 * @return Hash160 representation of the address
@@ -92,4 +102,6 @@ public class Address
 	{
 		return transactions;
 	}
+
+
 }

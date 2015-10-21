@@ -71,6 +71,16 @@ public class Transaction
 			outputs.add(new Output(outputElem.getAsJsonObject()));
 		}
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Transaction) {
+            Transaction that = (Transaction) o;
+            return (this.hash.equals(that.getHash()) && this.version == that.version && this.size == that.size);
+        }
+        return false;
+    }
 	
 	/**
 	 * @return Whether the transaction is a double spend

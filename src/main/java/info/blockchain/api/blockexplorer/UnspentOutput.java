@@ -37,6 +37,16 @@ public class UnspentOutput
 				o.get("confirmations").getAsLong());
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof UnspentOutput) {
+            UnspentOutput that = (UnspentOutput) o;
+            return (this.transactionHash.equals(that.getTransactionHash()) && this.script.equals(that.getScript()) && this.value == that.getValue());
+        }
+        return false;
+    }
+
 	/**
 	 * @return Index of the output in a transaction
 	 */

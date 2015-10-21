@@ -1,10 +1,10 @@
 package info.blockchain.api.blockexplorer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is a full representation of a block. For simpler representations, see
@@ -71,6 +71,16 @@ public class Block extends SimpleBlock
 					super.getHeight(), false));
 		}
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Block) {
+            Block that = (Block) o;
+            return (this.index == that.index && this.getHeight() == that.getHeight() && this.merkleRoot.equals(that.merkleRoot));
+        }
+        return false;
+    }
 	
 	/**
 	 * @return Block version as specified by the protocol

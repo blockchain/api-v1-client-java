@@ -52,4 +52,14 @@ public class Input
 	{
 		return scriptSignature;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Input) {
+            Input that = (Input) o;
+            return (this.previousOutput.equals(that.previousOutput) && this.sequence == that.sequence && this.scriptSignature.equals(that.scriptSignature));
+        }
+        return false;
+    }
 }

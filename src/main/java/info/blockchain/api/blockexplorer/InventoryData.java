@@ -42,6 +42,16 @@ public class InventoryData
 				i.get("relayed_count").getAsInt(),
 				i.get("relayed_percent").getAsInt());
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof InventoryData) {
+            InventoryData that = (InventoryData) o;
+            return (this.hash.equals(that.hash) && this.type.equals(that.type));
+        }
+        return false;
+    }
 	
 	/**
 	 * @return Object hash

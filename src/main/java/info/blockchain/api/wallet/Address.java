@@ -18,6 +18,17 @@ public class Address
 		this.label = label;
 		this.totalReceived = totalReceived;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Address) {
+            Address that = (Address) o;
+            return (this.getAddress().equals(that.getAddress()) && this.getLabel().equals(that.getLabel()) && this.totalReceived == that.totalReceived &&
+                this.balance == that.balance);
+        }
+        return false;
+    }
 	
 	/**
 	 * @return Balance in satoshi

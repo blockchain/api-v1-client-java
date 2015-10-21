@@ -48,6 +48,16 @@ public class Wallet {
 		this.jsonParser = new JsonParser();
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Wallet) {
+            Wallet that = (Wallet) o;
+            return (this.identifier.equals(that.identifier));
+        }
+        return false;
+    }
+
 	/**
 	 * Sends bitcoin from your wallet to a single address.
 	 *

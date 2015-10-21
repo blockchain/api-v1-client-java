@@ -26,6 +26,16 @@ public class Output {
 		}
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Output) {
+            Output that = (Output) o;
+            return (this.script.equals(that.script) && this.value == that.value && this.txIndex == that.txIndex);
+        }
+        return false;
+    }
+
 	public Output (JsonObject o) {
 		this(o, o.get("spent").getAsBoolean());
 	}

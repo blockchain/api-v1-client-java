@@ -29,6 +29,16 @@ public class SimpleBlock
 				b.get("main_chain").getAsBoolean());
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof SimpleBlock) {
+            SimpleBlock that = (SimpleBlock) o;
+            return (this.hash.equals(that.getHash()) && this.getHeight() == that.getHeight() && this.mainChain == that.isMainChain());
+        }
+        return false;
+    }
+
 	/**
 	 * @return Block height
 	 */
