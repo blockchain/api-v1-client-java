@@ -72,7 +72,6 @@ public class HttpClient implements HttpClientInterface {
 			url = new URL(BASE_URL + resource);
 		}
 
-		System.out.println(url);
 
 		HttpURLConnection conn = null;
 
