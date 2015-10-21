@@ -39,14 +39,39 @@ public class Address {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Address) {
-            Address that = (Address) o;
-            return (this.getAddress().equals(that.getAddress()));
+
+        Address address1 = (Address) o;
+
+        if (totalReceived != address1.totalReceived) {
+            return false;
         }
-        return false;
+        if (totalSent != address1.totalSent) {
+            return false;
+        }
+        if (finalBalance != address1.finalBalance) {
+            return false;
+        }
+        if (!hash160.equals(address1.hash160)) {
+            return false;
+        }
+        return address.equals(address1.address);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = hash160.hashCode();
+        result = 31 * result + address.hashCode();
+        result = 31 * result + (int) (totalReceived ^ (totalReceived >>> 32));
+        result = 31 * result + (int) (totalSent ^ (totalSent >>> 32));
+        result = 31 * result + (int) (finalBalance ^ (finalBalance >>> 32));
+        return result;
     }
 
     /**

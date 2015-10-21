@@ -28,14 +28,35 @@ public class UnspentOutput {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof UnspentOutput) {
-            UnspentOutput that = (UnspentOutput) o;
-            return (this.transactionHash.equals(that.getTransactionHash()) && this.script.equals(that.getScript()) && this.value == that.getValue());
+
+        UnspentOutput that = (UnspentOutput) o;
+
+        if (transactionIndex != that.transactionIndex) {
+            return false;
         }
-        return false;
+        if (value != that.value) {
+            return false;
+        }
+        if (transactionHash != null ? !transactionHash.equals(that.transactionHash) : that.transactionHash != null) {
+            return false;
+        }
+        return !(script != null ? !script.equals(that.script) : that.script != null);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = transactionHash != null ? transactionHash.hashCode() : 0;
+        result = 31 * result + (int) (transactionIndex ^ (transactionIndex >>> 32));
+        result = 31 * result + (script != null ? script.hashCode() : 0);
+        result = 31 * result + (int) (value ^ (value >>> 32));
+        return result;
     }
 
     /**

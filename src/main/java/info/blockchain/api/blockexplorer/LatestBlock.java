@@ -41,4 +41,32 @@ public class LatestBlock extends SimpleBlock {
     public long getIndex () {
         return index;
     }
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        LatestBlock that = (LatestBlock) o;
+
+        if (index != that.index) {
+            return false;
+        }
+        return transactionIndexes.equals(that.transactionIndexes);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = (int) (index ^ (index >>> 32));
+        result = 31 * result + transactionIndexes.hashCode();
+        return result;
+    }
 }

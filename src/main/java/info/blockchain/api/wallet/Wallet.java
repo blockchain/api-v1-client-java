@@ -50,14 +50,22 @@ public class Wallet {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Wallet) {
-            Wallet that = (Wallet) o;
-            return (this.identifier.equals(that.identifier));
-        }
-        return false;
+
+        Wallet wallet = (Wallet) o;
+
+        return !(identifier != null ? !identifier.equals(wallet.identifier) : wallet.identifier != null);
+
+    }
+
+    @Override
+    public int hashCode () {
+        return identifier != null ? identifier.hashCode() : 0;
     }
 
     /**

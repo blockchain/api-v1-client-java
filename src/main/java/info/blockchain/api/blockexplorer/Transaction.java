@@ -54,14 +54,43 @@ public class Transaction {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Transaction) {
-            Transaction that = (Transaction) o;
-            return (this.hash.equals(that.getHash()) && this.version == that.version && this.size == that.size);
+
+        Transaction that = (Transaction) o;
+
+        if (index != that.index) {
+            return false;
         }
-        return false;
+        if (version != that.version) {
+            return false;
+        }
+        if (size != that.size) {
+            return false;
+        }
+        if (hash != null ? !hash.equals(that.hash) : that.hash != null) {
+            return false;
+        }
+        if (inputs != null ? !inputs.equals(that.inputs) : that.inputs != null) {
+            return false;
+        }
+        return !(outputs != null ? !outputs.equals(that.outputs) : that.outputs != null);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = hash != null ? hash.hashCode() : 0;
+        result = 31 * result + (int) (index ^ (index >>> 32));
+        result = 31 * result + version;
+        result = 31 * result + (int) (size ^ (size >>> 32));
+        result = 31 * result + (inputs != null ? inputs.hashCode() : 0);
+        result = 31 * result + (outputs != null ? outputs.hashCode() : 0);
+        return result;
     }
 
     /**

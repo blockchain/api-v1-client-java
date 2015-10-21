@@ -24,14 +24,35 @@ public class SimpleBlock {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof SimpleBlock) {
-            SimpleBlock that = (SimpleBlock) o;
-            return (this.hash.equals(that.getHash()) && this.getHeight() == that.getHeight() && this.mainChain == that.isMainChain());
+
+        SimpleBlock that = (SimpleBlock) o;
+
+        if (height != that.height) {
+            return false;
         }
-        return false;
+        if (time != that.time) {
+            return false;
+        }
+        if (mainChain != that.mainChain) {
+            return false;
+        }
+        return !(hash != null ? !hash.equals(that.hash) : that.hash != null);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = (int) (height ^ (height >>> 32));
+        result = 31 * result + (hash != null ? hash.hashCode() : 0);
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        result = 31 * result + (mainChain ? 1 : 0);
+        return result;
     }
 
     /**

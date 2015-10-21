@@ -28,14 +28,47 @@ public class Output {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Output) {
-            Output that = (Output) o;
-            return (this.script.equals(that.script) && this.value == that.value && this.txIndex == that.txIndex);
+
+        Output output = (Output) o;
+
+        if (n != output.n) {
+            return false;
         }
-        return false;
+        if (value != output.value) {
+            return false;
+        }
+        if (txIndex != output.txIndex) {
+            return false;
+        }
+        if (spent != output.spent) {
+            return false;
+        }
+        if (spentToAddress != output.spentToAddress) {
+            return false;
+        }
+        if (!address.equals(output.address)) {
+            return false;
+        }
+        return script.equals(output.script);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = n;
+        result = 31 * result + (int) (value ^ (value >>> 32));
+        result = 31 * result + address.hashCode();
+        result = 31 * result + (int) (txIndex ^ (txIndex >>> 32));
+        result = 31 * result + script.hashCode();
+        result = 31 * result + (spent ? 1 : 0);
+        result = 31 * result + (spentToAddress ? 1 : 0);
+        return result;
     }
 
     public Output (JsonObject o) {

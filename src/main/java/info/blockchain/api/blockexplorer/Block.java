@@ -49,14 +49,50 @@ public class Block extends SimpleBlock {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Block) {
-            Block that = (Block) o;
-            return (this.index == that.index && this.getHeight() == that.getHeight() && this.merkleRoot.equals(that.merkleRoot));
+        if (!super.equals(o)) {
+            return false;
         }
-        return false;
+
+        Block block = (Block) o;
+
+        if (version != block.version) {
+            return false;
+        }
+        if (fees != block.fees) {
+            return false;
+        }
+        if (nonce != block.nonce) {
+            return false;
+        }
+        if (size != block.size) {
+            return false;
+        }
+        if (index != block.index) {
+            return false;
+        }
+        if (!previousBlockHash.equals(block.previousBlockHash)) {
+            return false;
+        }
+        return merkleRoot.equals(block.merkleRoot);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = version;
+        result = 31 * result + previousBlockHash.hashCode();
+        result = 31 * result + merkleRoot.hashCode();
+        result = 31 * result + (int) (fees ^ (fees >>> 32));
+        result = 31 * result + (int) (nonce ^ (nonce >>> 32));
+        result = 31 * result + (int) (size ^ (size >>> 32));
+        result = 31 * result + (int) (index ^ (index >>> 32));
+        return result;
     }
 
     /**

@@ -18,15 +18,35 @@ public class Address {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Address) {
-            Address that = (Address) o;
-            return (this.getAddress().equals(that.getAddress()) && this.getLabel().equals(that.getLabel()) && this.totalReceived == that.totalReceived &&
-                this.balance == that.balance);
+
+        Address address1 = (Address) o;
+
+        if (balance != address1.balance) {
+            return false;
         }
-        return false;
+        if (totalReceived != address1.totalReceived) {
+            return false;
+        }
+        if (address != null ? !address.equals(address1.address) : address1.address != null) {
+            return false;
+        }
+        return !(label != null ? !label.equals(address1.label) : address1.label != null);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = (int) (balance ^ (balance >>> 32));
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (int) (totalReceived ^ (totalReceived >>> 32));
+        return result;
     }
 
     /**

@@ -49,13 +49,30 @@ public class Input {
 
     @Override
     public boolean equals (Object o) {
-        if (o == null) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (o instanceof Input) {
-            Input that = (Input) o;
-            return (this.previousOutput.equals(that.previousOutput) && this.sequence == that.sequence && this.scriptSignature.equals(that.scriptSignature));
+
+        Input input = (Input) o;
+
+        if (sequence != input.sequence) {
+            return false;
         }
-        return false;
+        if (!previousOutput.equals(input.previousOutput)) {
+            return false;
+        }
+        return scriptSignature.equals(input.scriptSignature);
+
+    }
+
+    @Override
+    public int hashCode () {
+        int result = previousOutput.hashCode();
+        result = 31 * result + (int) (sequence ^ (sequence >>> 32));
+        result = 31 * result + scriptSignature.hashCode();
+        return result;
     }
 }
