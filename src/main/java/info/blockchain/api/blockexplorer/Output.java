@@ -37,37 +37,21 @@ public class Output {
 
         Output output = (Output) o;
 
-        if (n != output.n) {
-            return false;
-        }
         if (value != output.value) {
             return false;
         }
         if (txIndex != output.txIndex) {
             return false;
         }
-        if (spent != output.spent) {
-            return false;
-        }
-        if (spentToAddress != output.spentToAddress) {
-            return false;
-        }
-        if (!address.equals(output.address)) {
-            return false;
-        }
-        return script.equals(output.script);
+        return !(script != null ? !script.equals(output.script) : output.script != null);
 
     }
 
     @Override
     public int hashCode () {
-        int result = n;
-        result = 31 * result + (int) (value ^ (value >>> 32));
-        result = 31 * result + address.hashCode();
+        int result = (int) (value ^ (value >>> 32));
         result = 31 * result + (int) (txIndex ^ (txIndex >>> 32));
-        result = 31 * result + script.hashCode();
-        result = 31 * result + (spent ? 1 : 0);
-        result = 31 * result + (spentToAddress ? 1 : 0);
+        result = 31 * result + (script != null ? script.hashCode() : 0);
         return result;
     }
 
