@@ -39,7 +39,11 @@ public class HttpClient implements HttpClientInterface {
      * @throws APIException If the server returns an error
      */
     public String get (String resource, Map<String, String> params) throws APIException, IOException {
-        return openURL(resource, params, "GET");
+        return openURL(BASE_URL, resource, params, "GET");
+    }
+
+    public String get (String baseURL, String resource, Map<String, String> params) throws APIException, IOException {
+        return openURL(baseURL, resource, params, "GET");
     }
 
     /**
@@ -51,10 +55,12 @@ public class HttpClient implements HttpClientInterface {
      * @throws APIException If the server returns an error
      */
     public String post (String resource, Map<String, String> params) throws APIException, IOException {
-        return openURL(resource, params, "POST");
+        return openURL(BASE_URL, resource, params, "POST");
     }
 
-    private static String openURL (String resource, Map<String, String> params, String requestMethod) throws APIException, IOException {
+
+
+    private static String openURL (String baseURL, String resource, Map<String, String> params, String requestMethod) throws APIException, IOException {
         String encodedParams = urlEncodeParams(params);
         URL url = null;
         APIException apiException = null;
@@ -63,9 +69,9 @@ public class HttpClient implements HttpClientInterface {
         String responseStr = null;
 
         if (requestMethod.equals("GET")) {
-            url = new URL(BASE_URL + resource + '?' + encodedParams);
+            url = new URL(baseURL + resource + '?' + encodedParams);
         } else if (requestMethod.equals("POST")) {
-            url = new URL(BASE_URL + resource);
+            url = new URL(baseURL + resource);
         }
 
         HttpURLConnection conn = null;
@@ -74,6 +80,8 @@ public class HttpClient implements HttpClientInterface {
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(requestMethod);
             conn.setConnectTimeout(TIMEOUT_MS);
+
+            System.out.println(url);
 
             if (requestMethod.equals("POST")) {
                 byte[] postBytes = encodedParams.getBytes("UTF-8");
