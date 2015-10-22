@@ -12,29 +12,6 @@ $ cd api-v1-client-java
 $ mvn install
 ```
 
-We also provide a snapshot Maven repository for users who prefer managing dependencies that way.
-
-Add the following repository to your pom.xml:
-```xml
-    <repository>
-        <id>api-v1-client-java-mvn-repo</id>
-        <url>https://raw.githubusercontent.com/blockchain/api-v1-client-java/mvn-repo/</url>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
-    </repository>
-```
-
-Add the following dependency to your pom.xml:
-```xml
-  <dependency>
-  	<groupId>info.blockchain</groupId>
-  	<artifactId>api</artifactId>
-  	<version>LATEST</version> <!-- for a specific version see the list of tags -->
-  </dependency>
-```
-
 Note that the above procedures require Maven. If you do not wish to use Maven, please compile the source manually.
 
 The library consists of the following packages:
