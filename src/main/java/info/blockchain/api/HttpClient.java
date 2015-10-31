@@ -63,7 +63,7 @@ public class HttpClient implements HttpClientInterface {
         String responseStr = null;
 
         if (requestMethod.equals("GET")) {
-            url = new URL(BASE_URL + resource + '?' + encodedParams);
+            url = new URL(BASE_URL + resource + encodedParams);
         } else if (requestMethod.equals("POST")) {
             url = new URL(BASE_URL + resource);
         }
@@ -127,7 +127,7 @@ public class HttpClient implements HttpClientInterface {
                     data.append('=');
                     data.append(URLEncoder.encode(kvp.getValue(), "UTF-8"));
                 }
-                result = data.toString();
+                result = '?' + data.toString();
             } catch (UnsupportedEncodingException e) {
             }
         }
