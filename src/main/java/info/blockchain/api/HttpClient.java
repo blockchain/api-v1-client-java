@@ -58,6 +58,7 @@ public class HttpClient implements HttpClientInterface {
      * @param params   Map containing request parameters
      * @return String response
      * @throws APIException If the server returns an error
+     * @throws IOException  If the server is not reachable
      */
     public String post (String resource, Map<String, String> params) throws APIException, IOException {
         return openURL(BASE_URL, resource, params, "POST");
