@@ -13,7 +13,10 @@ import java.util.Map;
  * This class reflects the functionality documented at
  * https://blockchain.info/api/api_receive. It allows merchants to create forwarding
  * addresses and be notified upon payment.
+ *
+ * @deprecated Since there is a new Receive Payments API, this class is deprecated. Use ReceiveV2 instead.
  */
+@Deprecated
 public class Receive {
     /**
      * Calls the 'api/receive' endpoint and creates a forwarding address.
@@ -22,7 +25,9 @@ public class Receive {
      * @param callbackUrl      Callback URI that will be called upon payment
      * @return An instance of the ReceiveResponse class
      * @throws APIException If the server returns an error
+     * @deprecated Use ReceiveV2.receive(..) instead
      */
+    @Deprecated
     public static ReceiveResponse receive (String receivingAddress, String callbackUrl) throws APIException, IOException {
         return receive(receivingAddress, callbackUrl, null);
     }
@@ -35,7 +40,9 @@ public class Receive {
      * @param apiCode          Blockchain.info API code (optional, nullable)
      * @return An instance of the ReceiveResponse class
      * @throws APIException If the server returns an error
+     * @deprecated Use ReceiveV2.receive(..) instead
      */
+    @Deprecated
     public static ReceiveResponse receive (String receivingAddress, String callbackUrl, String apiCode) throws APIException, IOException {
         Map<String, String> params = new HashMap<String, String>();
         params.put("address", receivingAddress);
