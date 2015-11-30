@@ -19,9 +19,14 @@ public class HttpClient implements HttpClientInterface {
 
     private static HttpClientInterface instance;
 
-    public static HttpClientInterface getInstance () {
+    public synchronized static HttpClientInterface getInstance () {
         if (instance == null) {
-            instance = new HttpClient();
+            // Thread Safe. Might be costly operation in some case
+            synchronized (HttpClient.class) {
+                if (instance == null) {
+                    instance = new HttpClient();
+                }
+            }
         }
         return instance;
     }
