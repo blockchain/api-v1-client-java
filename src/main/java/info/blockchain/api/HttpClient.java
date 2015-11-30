@@ -58,8 +58,6 @@ public class HttpClient implements HttpClientInterface {
         return openURL(BASE_URL, resource, params, "POST");
     }
 
-
-
     private static String openURL (String baseURL, String resource, Map<String, String> params, String requestMethod) throws APIException, IOException {
         String encodedParams = urlEncodeParams(params);
         URL url = null;
@@ -80,8 +78,6 @@ public class HttpClient implements HttpClientInterface {
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(requestMethod);
             conn.setConnectTimeout(TIMEOUT_MS);
-
-            System.out.println(url);
 
             if (requestMethod.equals("POST")) {
                 byte[] postBytes = encodedParams.getBytes("UTF-8");
