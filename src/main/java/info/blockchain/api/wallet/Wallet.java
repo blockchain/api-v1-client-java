@@ -157,11 +157,15 @@ public class Wallet {
         JsonObject topElem = parseResponse(response);
 
         List<Address> addresses = new ArrayList<Address>();
-        for (JsonElement jAddr : topElem.get("addresses").getAsJsonArray()) {
-            JsonObject a = jAddr.getAsJsonObject();
-            Address address = new Address(a.get("balance").getAsLong(), a.get("address").getAsString(), a.has("label") && !a.get("label").isJsonNull() ? a.get("label").getAsString() : null, a.get("total_received").getAsLong());
+        for (JsonElement jsonAddress : topElem.get("addresses").getAsJsonArray()) {
+            JsonObject addressObject = jsonAddress.getAsJsonObject();
+            Long balance = addressObject.get("balance").getAsLong();
+            String address = addressObject.get("address").getAsString();
+            String label =  addressObject.has("label") && !addressObject.get("label").isJsonNull() ? addressObject.get("label").getAsString() : null;
+            Long totalReceived =  addressObject.get("total_received").getAsLong();
+            Address computedAddress = new Address(balance, address, label, totalReceived);
 
-            addresses.add(address);
+            addresses.add(computedAddress);
         }
 
         return addresses;
