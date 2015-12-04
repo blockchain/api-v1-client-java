@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * This class reflects the functionality documented
@@ -99,7 +100,7 @@ public class Wallet {
     public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, String note) throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
         String method = null;
-
+        checkArgument(recipients.size() > 0, "recipients list should be non empty");
         if (recipients.size() == 1) {
             method = "payment";
             Entry<String, Long> e = recipients.entrySet().iterator().next();
