@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
 /**
  * This is a utility class for performing API calls using GET and POST requests. It is
@@ -13,8 +14,9 @@ import java.util.Map.Entry;
  * implementation via setCustomHttpClient(...), such that it will get used globally.
  */
 public class HttpClient implements HttpClientInterface {
-    private static final String BASE_URL = "https://blockchain.info/";
 
+    private static final String BASE_URL = "https://blockchain.info/";
+    public static final String GZIP = "gzip";
     public volatile static int TIMEOUT_MS = 10000;
 
     private static HttpClientInterface instance;
@@ -79,6 +81,7 @@ public class HttpClient implements HttpClientInterface {
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(requestMethod);
             conn.setConnectTimeout(TIMEOUT_MS);
+            conn.setRequestProperty("Accept-Encoding", GZIP);
 
             if (requestMethod.equals("POST")) {
                 byte[] postBytes = encodedParams.getBytes("UTF-8");
@@ -92,7 +95,9 @@ public class HttpClient implements HttpClientInterface {
             if (conn.getResponseCode() != 200) {
                 apiException = new APIException(inputStreamToString(conn.getErrorStream()));
             } else {
-                responseStr = inputStreamToString(conn.getInputStream());
+                responseStr = conn.getContentEncoding().equals(GZIP)
+                        ? inputStreamToString(new GZIPInputStream(conn.getInputStream()))
+                        : inputStreamToString(conn.getInputStream());
             }
         } catch (IOException e) {
             ioException = e;
