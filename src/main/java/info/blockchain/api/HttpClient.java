@@ -19,9 +19,14 @@ public class HttpClient implements HttpClientInterface {
 
     private static HttpClientInterface instance;
 
-    public static HttpClientInterface getInstance () {
+    public synchronized static HttpClientInterface getInstance () {
         if (instance == null) {
-            instance = new HttpClient();
+            // Thread Safe. Might be costly operation in some case
+            synchronized (HttpClient.class) {
+                if (instance == null) {
+                    instance = new HttpClient();
+                }
+            }
         }
         return instance;
     }
@@ -39,7 +44,11 @@ public class HttpClient implements HttpClientInterface {
      * @throws APIException If the server returns an error
      */
     public String get (String resource, Map<String, String> params) throws APIException, IOException {
-        return openURL(resource, params, "GET");
+        return openURL(BASE_URL, resource, params, "GET");
+    }
+
+    public String get (String baseURL, String resource, Map<String, String> params) throws APIException, IOException {
+        return openURL(baseURL, resource, params, "GET");
     }
 
     /**
@@ -49,12 +58,13 @@ public class HttpClient implements HttpClientInterface {
      * @param params   Map containing request parameters
      * @return String response
      * @throws APIException If the server returns an error
+     * @throws IOException  If the server is not reachable
      */
     public String post (String resource, Map<String, String> params) throws APIException, IOException {
-        return openURL(resource, params, "POST");
+        return openURL(BASE_URL, resource, params, "POST");
     }
 
-    private static String openURL (String resource, Map<String, String> params, String requestMethod) throws APIException, IOException {
+    private static String openURL (String baseURL, String resource, Map<String, String> params, String requestMethod) throws APIException, IOException {
         String encodedParams = urlEncodeParams(params);
         URL url = null;
         APIException apiException = null;
@@ -63,14 +73,18 @@ public class HttpClient implements HttpClientInterface {
         String responseStr = null;
 
         if (requestMethod.equals("GET")) {
+<<<<<<< HEAD
             if(encodedParams.isEmpty()) {
                 url = new URL(BASE_URL + resource);
             }
             else {
                 url = new URL(BASE_URL + resource + '?' + encodedParams);
             }            
+=======
+            url = new URL(baseURL + resource + '?' + encodedParams);
+>>>>>>> blockchain/rp
         } else if (requestMethod.equals("POST")) {
-            url = new URL(BASE_URL + resource);
+            url = new URL(baseURL + resource);
         }
 
         HttpURLConnection conn = null;
