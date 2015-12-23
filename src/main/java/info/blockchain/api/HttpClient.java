@@ -73,7 +73,16 @@ public class HttpClient implements HttpClientInterface {
         String responseStr = null;
 
         if (requestMethod.equals("GET")) {
+<<<<<<< HEAD
+            if(encodedParams.isEmpty()) {
+                url = new URL(BASE_URL + resource);
+            }
+            else {
+                url = new URL(BASE_URL + resource + '?' + encodedParams);
+            }            
+=======
             url = new URL(baseURL + resource + '?' + encodedParams);
+>>>>>>> blockchain/rp
         } else if (requestMethod.equals("POST")) {
             url = new URL(baseURL + resource);
         }
