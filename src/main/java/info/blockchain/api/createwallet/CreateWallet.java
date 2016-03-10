@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * This class reflects the functionality documented
- * at https://blockchain.info/api/create_walleti. It allows users to create new wallets
+ * at https://blockchain.info/api/create_wallet. It allows users to create new wallets
  * as long as their API code has the 'generate wallet' permission.
  */
 public class CreateWallet {
@@ -40,23 +40,31 @@ public class CreateWallet {
      * @throws APIException If the server returns an error
      */
     public static CreateWalletResponse create (String password, String apiCode, String privateKey, String label, String email) throws IOException, APIException {
-        Map<String, String> params = new HashMap<String, String>();
-
-        params.put("password", password);
-        params.put("api_code", apiCode);
-        if (privateKey != null) {
-            params.put("priv", privateKey);
+        Map<String, String> params = createParams(password, apiCode, privateKey, label, email);
+           
+        try{
+          String response = HttpClient.getInstance().post("api/v2/create_wallet", params);
+          JsonObject jsonObj = new JsonParser().parse(response).getAsJsonObject();
+          return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("link").getAsString());
         }
-        if (label != null) {
-            params.put("label", label);
+        catch(Exception e){
+        throw new APIException(e.getMessage());
         }
-        if (email != null) {
-            params.put("email", email);
-        }
-
-        String response = HttpClient.getInstance().post("api/v2/create_wallet", params);
-        JsonObject jsonObj = new JsonParser().parse(response).getAsJsonObject();
-
-        return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("link").getAsString());
+    }
+    
+    static Map<String, String> createParams(String password, String apiCode, String privateKey, String label, String email) {
+      Map<String, String> params = new HashMap<String, String>();
+      params.put("password", password);
+      params.put("api_code", apiCode);
+      if (privateKey != null) {
+          params.put("priv", privateKey);
+      }
+      if (label != null) {
+          params.put("label", label);
+      }
+      if (email != null) {
+          params.put("email", email);
+      }
+      return params;
     }
 }

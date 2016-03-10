@@ -21,7 +21,7 @@ public class Output {
         this.txIndex = txIndex;
         this.script = script;
         this.spent = spent;
-        if (address != "") {
+        if (!address.isEmpty()) {
             spentToAddress = true;
         }
     }
@@ -55,12 +55,17 @@ public class Output {
         return result;
     }
 
-    public Output (JsonObject o) {
-        this(o, o.get("spent").getAsBoolean());
+    public Output (JsonObject output) {
+        this(output, output.get("spent").getAsBoolean());
     }
 
-    public Output (JsonObject o, boolean spent) {
-        this(o.get("n").getAsInt(), o.get("value").getAsLong(), o.has("addr") ? o.get("addr").getAsString() : "", o.get("tx_index").getAsLong(), o.get("script").getAsString(), spent);
+    public Output (JsonObject output, boolean spent) {
+      this(output.get("n").getAsInt(),
+           output.get("value").getAsLong(),
+           output.has("addr") ? output.get("addr").getAsString() : "",
+           output.get("tx_index").getAsLong(), 
+           output.get("script").getAsString(),
+           spent);  
     }
 
     /**

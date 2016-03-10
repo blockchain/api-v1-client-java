@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * This class reflects the functionality documented
@@ -38,20 +39,17 @@ public class ExchangeRates {
      * @throws APIException If the server returns an error
      */
     public static Map<String, Currency> getTicker (String apiCode) throws APIException, IOException {
-        Map<String, String> params = new HashMap<String, String>();
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
+        Map<String, String> params = createDefaultParams(apiCode);
 
         String response = HttpClient.getInstance().get("ticker", params);
         JsonObject ticker = new JsonParser().parse(response).getAsJsonObject();
 
         Map<String, Currency> resultMap = new HashMap<String, Currency>();
-        for (Entry<String, JsonElement> ccyKVP : ticker.entrySet()) {
-            JsonObject ccy = ccyKVP.getValue().getAsJsonObject();
+        for (Entry<String, JsonElement> currencyPair : ticker.entrySet()) {
+            JsonObject ccy = currencyPair.getValue().getAsJsonObject();
             Currency currency = new Currency(ccy.get("buy").getAsDouble(), ccy.get("sell").getAsDouble(), ccy.get("last").getAsDouble(), ccy.get("15m").getAsDouble(), ccy.get("symbol").getAsString());
 
-            resultMap.put(ccyKVP.getKey(), currency);
+            resultMap.put(currencyPair.getKey(), currency);
         }
 
         return resultMap;
@@ -79,14 +77,25 @@ public class ExchangeRates {
      * @throws APIException If the server returns an error
      */
     public static BigDecimal toBTC (String currency, BigDecimal value, String apiCode) throws APIException, IOException {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("currency", currency);
-        params.put("value", String.valueOf(value));
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
-
+        Map<String, String> params = createDefaultParams(apiCode);
+        addToParams (params , "currency", currency);
+        addToParams (params , "value", String.valueOf(value));  
+      
         String response = HttpClient.getInstance().get("tobtc", params);
         return new BigDecimal(response);
+    }
+
+    private static  Map<String, String> createDefaultParams (String apiCode) {
+      Map<String, String> params = new HashMap<String, String>();
+      if (apiCode != null) {
+        params.put("api_code", apiCode);
+      }
+      return params; 
+    }
+    
+    private static void addToParams (Map<String, String> params , String key, String value) {
+      checkArgument(params != null, "Params list should be initialised before adding new pairs.");
+      params.put(key, value);
+      
     }
 }

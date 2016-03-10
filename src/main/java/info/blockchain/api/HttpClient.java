@@ -117,7 +117,7 @@ public class HttpClient implements HttpClientInterface {
         return responseStr;
     }
 
-    private static String urlEncodeParams (Map<String, String> params) {
+    private static String urlEncodeParams (Map<String, String> params) throws IOException{
         String result = "";
 
         if (params != null && params.size() > 0) {
@@ -134,6 +134,7 @@ public class HttpClient implements HttpClientInterface {
                 }
                 result = data.toString();
             } catch (UnsupportedEncodingException e) {
+              throw e;
             }
         }
 
@@ -149,7 +150,7 @@ public class HttpClient implements HttpClientInterface {
         while ((line = reader.readLine()) != null) {
             responseStringBuilder.append(line);
         }
-
+        reader.close();
         return responseStringBuilder.toString();
     }
 }
