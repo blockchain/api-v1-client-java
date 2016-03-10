@@ -23,25 +23,29 @@ import java.util.Map.Entry;
 public class Wallet {
     private JsonParser jsonParser;
 
+    private String serviceURL;
     private String identifier;
     private String password;
     private String secondPassword;
     private String apiCode;
 
     /**
+     * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
      * @param identifier Wallet identifier (GUID)
      * @param password   Decryption password
      */
-    public Wallet (String identifier, String password) {
-        this(identifier, password, null);
+    public Wallet (String serviceURL, String identifier, String password) {
+        this(serviceURL, identifier, password, null);
     }
 
     /**
+     * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
      * @param identifier     Wallet identifier (GUID)
      * @param password       Decryption password
      * @param secondPassword Second password
      */
-    public Wallet (String identifier, String password, String secondPassword) {
+    public Wallet (String serviceURL, String identifier, String password, String secondPassword) {
+        this.serviceURL = serviceURL;
         this.identifier = identifier;
         this.password = password;
         this.secondPassword = secondPassword;
@@ -120,7 +124,7 @@ public class Wallet {
             params.put("note", note);
         }
 
-        String response = HttpClient.getInstance().post(String.format("merchant/%s/%s", identifier, method), params);
+        String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/%s", identifier, method), params);
         JsonObject topElem = parseResponse(response);
 
         return new PaymentResponse(topElem.get("message").getAsString(), topElem.get("tx_hash").getAsString(), topElem.has("notice") ? topElem.get("notice").getAsString() : null);
@@ -134,7 +138,7 @@ public class Wallet {
      * @throws APIException If the server returns an error
      */
     public long getBalance () throws APIException, IOException {
-        String response = HttpClient.getInstance().get(String.format("merchant/%s/balance", identifier), buildBasicRequest());
+        String response = HttpClient.getInstance().get(serviceURL, String.format("merchant/%s/balance", identifier), buildBasicRequest());
         JsonObject topElem = parseResponse(response);
 
         return topElem.get("balance").getAsLong();
@@ -152,7 +156,7 @@ public class Wallet {
         Map<String, String> params = buildBasicRequest();
         params.put("confirmations", String.valueOf(confirmations));
 
-        String response = HttpClient.getInstance().get(String.format("merchant/%s/list", identifier), params);
+        String response = HttpClient.getInstance().get(serviceURL, String.format("merchant/%s/list", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         List<Address> addresses = new ArrayList<Address>();
@@ -180,7 +184,7 @@ public class Wallet {
         params.put("address", address);
         params.put("confirmations", String.valueOf(confirmations));
 
-        String response = HttpClient.getInstance().get(String.format("merchant/%s/address_balance", identifier), params);
+        String response = HttpClient.getInstance().get(serviceURL, String.format("merchant/%s/address_balance", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         return new Address(topElem.get("balance").getAsLong(), topElem.get("address").getAsString(), topElem.has("label") && !topElem.get("label").isJsonNull() ? topElem.get("label").getAsString() : null, topElem.get("total_received").getAsLong());
@@ -199,7 +203,7 @@ public class Wallet {
             params.put("label", label);
         }
 
-        String response = HttpClient.getInstance().post(String.format("merchant/%s/new_address", identifier), params);
+        String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/new_address", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         return new Address(0L, topElem.get("address").getAsString(), topElem.has("label") && !topElem.get("label").isJsonNull() ? topElem.get("label").getAsString() : null, 0L);
@@ -216,7 +220,7 @@ public class Wallet {
         Map<String, String> params = buildBasicRequest();
         params.put("address", address);
 
-        String response = HttpClient.getInstance().post(String.format("merchant/%s/archive_address", identifier), params);
+        String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/archive_address", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         return topElem.get("archived").getAsString();
@@ -233,7 +237,7 @@ public class Wallet {
         Map<String, String> params = buildBasicRequest();
         params.put("address", address);
 
-        String response = HttpClient.getInstance().post(String.format("merchant/%s/unarchive_address", identifier), params);
+        String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/unarchive_address", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         return topElem.get("active").getAsString();
@@ -251,7 +255,7 @@ public class Wallet {
         Map<String, String> params = buildBasicRequest();
         params.put("days", String.valueOf(days));
 
-        String response = HttpClient.getInstance().post(String.format("merchant/%s/auto_consolidate", identifier), params);
+        String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/auto_consolidate", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         List<String> addresses = new ArrayList<String>();

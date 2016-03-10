@@ -13,7 +13,7 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {	
-    	Wallet wallet = new Wallet("18d4cf81-fcec-4a94-aa93-202a25085c0e", "yourPassword123");
+    	Wallet wallet = new Wallet("http://localhost:3000/", "18d4cf81-fcec-4a94-aa93-202a25085c0e", "yourPassword123");
     	
     	// get an address from your wallet and include only transactions with up to 3
     	// confirmations in the balance

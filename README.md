@@ -24,6 +24,8 @@ The library consists of the following packages:
 * `info.blockchain.api.statistics` ([docs](docs/statistics.md)) ([api/charts_api][api5])
 * `info.blockchain.api.wallet` ([docs](docs/wallet.md)) ([api/blockchain\_wallet\_api][api6])
 
+In order to use `createwallet` and `wallet` you need to run an instance of [service-my-wallet-v3](https://github.com/blockchain/service-my-wallet-v3).
+
 ###Error handling
 
 All methods may throw exceptions caused by incorrectly passed parameters or other problems. If a call is rejected server-side, the `APIException` exception will be thrown. In case of a network error, the `IOException` exception will be thrown.

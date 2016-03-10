@@ -64,6 +64,10 @@ public class HttpClient implements HttpClientInterface {
         return openURL(BASE_URL, resource, params, "POST");
     }
 
+    public String post (String baseURL, String resource, Map<String, String> params) throws APIException, IOException {
+        return openURL(baseURL, resource, params, "POST");
+    }
+
     private static String openURL (String baseURL, String resource, Map<String, String> params, String requestMethod) throws APIException, IOException {
         String encodedParams = urlEncodeParams(params);
         URL url = null;
@@ -74,9 +78,9 @@ public class HttpClient implements HttpClientInterface {
 
         if (requestMethod.equals("GET")) {
             if (encodedParams.isEmpty()) {
-                url = new URL(BASE_URL + resource);
+                url = new URL(baseURL + resource);
             } else {
-                url = new URL(BASE_URL + resource + '?' + encodedParams);
+                url = new URL(baseURL + resource + '?' + encodedParams);
             }            
         } else if (requestMethod.equals("POST")) {
             url = new URL(baseURL + resource);

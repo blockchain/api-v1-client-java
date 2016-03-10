@@ -18,19 +18,21 @@ public class CreateWallet {
     /**
      * Creates a new Blockchain.info wallet.
      *
+     * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
      * @param password Password for the new wallet. At least 10 characters.
      * @param apiCode  API code with create wallets permission
      * @return An instance of the CreateWalletResponse class
      * @throws APIException If the server returns an error
      */
-    public static CreateWalletResponse create (String password, String apiCode) throws IOException, APIException {
-        return create(password, apiCode, null, null, null);
+    public static CreateWalletResponse create (String serviceURL, String password, String apiCode) throws IOException, APIException {
+        return create(serviceURL, password, apiCode, null, null, null);
     }
 
     /**
      * Creates a new Blockchain.info wallet. It can be created containing a pre-generated
      * private key or will otherwise generate a new private key.
      *
+     * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
      * @param password   Password for the new wallet. At least 10 characters.
      * @param apiCode    API code with create wallets permission
      * @param privateKey Private key to add to the wallet (optional, nullable)
@@ -39,7 +41,7 @@ public class CreateWallet {
      * @return An instance of the CreateWalletResponse class
      * @throws APIException If the server returns an error
      */
-    public static CreateWalletResponse create (String password, String apiCode, String privateKey, String label, String email) throws IOException, APIException {
+    public static CreateWalletResponse create (String serviceURL, String password, String apiCode, String privateKey, String label, String email) throws IOException, APIException {
         Map<String, String> params = new HashMap<String, String>();
 
         params.put("password", password);
@@ -54,9 +56,9 @@ public class CreateWallet {
             params.put("email", email);
         }
 
-        String response = HttpClient.getInstance().post("api/v2/create_wallet", params);
+        String response = HttpClient.getInstance().post(serviceURL, "api/v2/create_wallet", params);
         JsonObject jsonObj = new JsonParser().parse(response).getAsJsonObject();
 
-        return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("link").getAsString());
+        return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("label").getAsString());
     }
 }

@@ -6,12 +6,12 @@ package info.blockchain.api.createwallet;
 public class CreateWalletResponse {
     private String identifier;
     private String address;
-    private String link;
+    private String label;
 
-    public CreateWalletResponse (String identifier, String address, String link) {
+    public CreateWalletResponse (String identifier, String address, String label) {
         this.identifier = identifier;
         this.address = address;
-        this.link = link;
+        this.label = label;
     }
 
     /**
@@ -29,9 +29,9 @@ public class CreateWalletResponse {
     }
 
     /**
-     * @return Link to the wallet
+     * @return Label of first address in the wallet
      */
-    public String getLink () {
-        return link;
+    public String getLable () {
+        return label;
     }
 }
