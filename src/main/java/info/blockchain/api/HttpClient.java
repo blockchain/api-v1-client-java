@@ -150,6 +150,8 @@ public class HttpClient implements HttpClientInterface {
             responseStringBuilder.append(line);
         }
 
+        reader.close();
+
         return responseStringBuilder.toString();
     }
 }

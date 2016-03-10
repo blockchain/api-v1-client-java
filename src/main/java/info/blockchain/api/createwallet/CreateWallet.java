@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * This class reflects the functionality documented
- * at https://blockchain.info/api/create_walleti. It allows users to create new wallets
+ * at https://blockchain.info/api/create_wallet. It allows users to create new wallets
  * as long as their API code has the 'generate wallet' permission.
  */
 public class CreateWallet {
