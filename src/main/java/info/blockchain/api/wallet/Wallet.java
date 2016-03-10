@@ -94,15 +94,13 @@ public class Wallet {
      * @param note        Public note to include with the transaction (optional, nullable)
      * @return An instance of the PaymentResponse class
      * @throws APIException If the server returns an error
+     * @throws IllegalArgumentException If no recipients is null or empty
      */
     public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, String note) throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
         String method = null;
 
-        if (recipients == null || recipients.size() == 0) {
-            throw new APIException("Need at least one recipient");
-        }
-        if (recipients.size() == 1) {
+       if (recipients.size() == 1) {
             method = "payment";
             Entry<String, Long> e = recipients.entrySet().iterator().next();
             params.put("to", e.getKey());
