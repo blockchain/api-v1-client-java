@@ -59,8 +59,7 @@ public class Wallet {
 
         Wallet wallet = (Wallet) o;
 
-        return !(identifier != null ? !identifier.equals(wallet.identifier) : wallet.identifier != null);
-
+        return identifier == null ? wallet.identifier == null : identifier.equals(wallet.identifier);
     }
 
     @Override
@@ -100,6 +99,9 @@ public class Wallet {
         Map<String, String> params = buildBasicRequest();
         String method = null;
 
+        if (recipients == null || recipients.size() == 0) {
+            throw new APIException("Need at least one recipient");
+        }
         if (recipients.size() == 1) {
             method = "payment";
             Entry<String, Long> e = recipients.entrySet().iterator().next();
