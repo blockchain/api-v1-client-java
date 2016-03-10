@@ -26,7 +26,7 @@ The library consists of the following packages:
 
 ###Error handling
 
-All methods may throw exceptions caused by incorrectly passed parameters or other problems. If a call is rejected server-side, the `APIException` exception will be thrpwn. In case of a network error, the `IOException` exception will be thrown.
+All methods may throw exceptions caused by incorrectly passed parameters or other problems. If a call is rejected server-side, the `APIException` exception will be thrown. In case of a network error, the `IOException` exception will be thrown.
 
 ###Connection timeouts
 
