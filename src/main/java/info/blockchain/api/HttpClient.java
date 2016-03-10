@@ -73,7 +73,11 @@ public class HttpClient implements HttpClientInterface {
         String responseStr = null;
 
         if (requestMethod.equals("GET")) {
-            url = new URL(baseURL + resource + '?' + encodedParams);
+            if (encodedParams.isEmpty()) {
+                url = new URL(BASE_URL + resource);
+            } else {
+                url = new URL(BASE_URL + resource + '?' + encodedParams);
+            }            
         } else if (requestMethod.equals("POST")) {
             url = new URL(baseURL + resource);
         }
@@ -154,6 +158,8 @@ public class HttpClient implements HttpClientInterface {
         while ((line = reader.readLine()) != null) {
             responseStringBuilder.append(line);
         }
+
+        reader.close();
 
         return responseStringBuilder.toString();
     }
