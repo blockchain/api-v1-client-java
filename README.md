@@ -93,6 +93,16 @@ In order to prevent abuse some API methods require an API key approved with some
 
 The same API key can be used to bypass the request limiter.
 
+###Code Coverage Report generation
+
+To generate the code coverage report, execute the following command:
+```sh
+mvn clean verify
+```
+
+This will generate a code coverage report in `target/site/jacoco/index.html`.
+
+
 [api1]: https://blockchain.info/api/blockchain_api
 [api2]: https://blockchain.info/api/create_wallet
 [api3]: https://blockchain.info/api/exchange_rates_api
