@@ -1,6 +1,8 @@
 ##`info.blockchain.api.receive` package
 
-The `receive` package contains the `Receive` class that reflects the functionality documented at at https://blockchain.info/api/api_receive. It allows merchants to create forwarding addresses and be notified upon payment.
+*Deprecated, please use [Receive Payments V2](receive2.md)*
+
+The `receive` package contains the `Receive` class that reflects the functionality documented at https://blockchain.info/api/api_receive. It allows merchants to create forwarding addresses and be notified upon payment.
 
 Example usage:
 
