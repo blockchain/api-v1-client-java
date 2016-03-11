@@ -24,7 +24,8 @@ public class CreateWallet {
      * @return An instance of the CreateWalletResponse class
      * @throws APIException If the server returns an error
      */
-    public static CreateWalletResponse create (String serviceURL, String password, String apiCode) throws IOException, APIException {
+    public static CreateWalletResponse create (String serviceURL, String password,
+        String apiCode) throws IOException, APIException {
         return create(serviceURL, password, apiCode, null, null, null);
     }
 
@@ -41,7 +42,8 @@ public class CreateWallet {
      * @return An instance of the CreateWalletResponse class
      * @throws APIException If the server returns an error
      */
-    public static CreateWalletResponse create (String serviceURL, String password, String apiCode, String privateKey, String label, String email) throws IOException, APIException {
+    public static CreateWalletResponse create (String serviceURL, String password,String apiCode,
+        String privateKey, String label, String email) throws IOException, APIException {
         Map<String, String> params = new HashMap<String, String>();
 
         params.put("password", password);
@@ -56,9 +58,12 @@ public class CreateWallet {
             params.put("email", email);
         }
 
-        String response = HttpClient.getInstance().post(serviceURL, "api/v2/create_wallet", params);
+        String response = HttpClient.getInstance().post(serviceURL, "api/v2/create", params);
         JsonObject jsonObj = new JsonParser().parse(response).getAsJsonObject();
 
-        return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("label").getAsString());
+        return new CreateWalletResponse(
+            jsonObj.get("guid").getAsString(),
+            jsonObj.get("address").getAsString(),
+            jsonObj.get("label").getAsString());
     }
 }

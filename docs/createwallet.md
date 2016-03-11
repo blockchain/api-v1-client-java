@@ -13,7 +13,10 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {	
-    	CreateWalletResponse wallet = CreateWallet.create("someComplicated123Password", "8fd2335e-720c-442b-9694-83bdd2983cc9");
+    	CreateWalletResponse wallet = CreateWallet.create(
+    	        "http://localhost:3000/",
+    	        "A_SECURE_PASSWORD",
+    	        "YOUR_API_CODE");
     	
     	System.out.println(wallet.getIdentifier());
     }

@@ -13,7 +13,11 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {	
-    	Wallet wallet = new Wallet("http://localhost:3000/", "18d4cf81-fcec-4a94-aa93-202a25085c0e", "yourPassword123");
+    	Wallet wallet = new Wallet(
+    	        "http://localhost:3000/",
+    	        "YOU_API_CODE",
+    	        "YOUR_GUID",
+    	        "YOUR_SUPER_SECURE_PASSWORD");
     	
     	// get an address from your wallet and include only transactions with up to 3
     	// confirmations in the balance
@@ -32,19 +36,12 @@ public class App
     	List<Address> addresses = wallet.listAddresses(0);
     	for (Address a : addresses)
     	{
-    		System.out.println(String.format("The address %s has a balance of % satoshi",
+    		System.out.println(String.format("The address %s has a balance of %s satoshi",
     				a.getAddress(), a.getBalance()));
     	}
     	
     	// archive an old address
     	wallet.archiveAddress("1JzSZFs2DQke2B3S4pBxaNaMzzVZaG4Cqh");
-    	
-    	// consolidate addresses that have been inactive more than 25 days
-    	List<String> consolidated = wallet.consolidate(25);
-    	for (String c : consolidated)
-    	{
-    		System.out.println(String.format("Address %s has been consolidated", c));
-    	}
     	
     	// create a new address and attach a label to it
     	Address newAddr = wallet.newAddress("test label 123");

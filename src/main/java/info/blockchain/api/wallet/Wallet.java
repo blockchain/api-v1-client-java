@@ -1,18 +1,19 @@
 package info.blockchain.api.wallet;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import info.blockchain.api.APIException;
-import info.blockchain.api.HttpClient;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import info.blockchain.api.APIException;
+import info.blockchain.api.HttpClient;
 
 /**
  * This class reflects the functionality documented
@@ -31,21 +32,24 @@ public class Wallet {
 
     /**
      * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
+     * @param apiCode    API Code
      * @param identifier Wallet identifier (GUID)
      * @param password   Decryption password
      */
-    public Wallet (String serviceURL, String identifier, String password) {
-        this(serviceURL, identifier, password, null);
+    public Wallet (String serviceURL, String apiCode, String identifier, String password) {
+        this(serviceURL, apiCode, identifier, password, null);
     }
 
     /**
      * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
+     * @param apiCode    API Code
      * @param identifier     Wallet identifier (GUID)
      * @param password       Decryption password
      * @param secondPassword Second password
      */
-    public Wallet (String serviceURL, String identifier, String password, String secondPassword) {
+    public Wallet (String serviceURL, String apiCode, String identifier, String password, String secondPassword) {
         this.serviceURL = serviceURL;
+        this.apiCode = apiCode;
         this.identifier = identifier;
         this.password = password;
         this.secondPassword = secondPassword;
@@ -287,12 +291,5 @@ public class Wallet {
         }
 
         return topElem;
-    }
-
-    /**
-     * Sets the Blockchain.info API code
-     */
-    public void setApiCode (String apiCode) {
-        this.apiCode = apiCode;
     }
 }
