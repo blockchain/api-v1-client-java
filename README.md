@@ -20,7 +20,7 @@ The library consists of the following packages:
 * `info.blockchain.api.createwallet` ([docs](docs/createwallet.md)) ([api/create_wallet][api2])
 * `info.blockchain.api.exchangerates` ([docs](docs/exchangerates.md)) ([api/exchange\_rates\_api][api3])
 * `info.blockchain.api.pushtx` ([docs](docs/pushtx.md)) ([pushtx][api7])
-* `info.blockchain.api.receive` ([docs](docs/receive.md)) ([api/api_receive][api4])
+* `info.blockchain.api.receive2` ([docs](docs/receive2.md)) ([api/api_receive][api4])
 * `info.blockchain.api.statistics` ([docs](docs/statistics.md)) ([api/charts_api][api5])
 * `info.blockchain.api.wallet` ([docs](docs/wallet.md)) ([api/blockchain\_wallet\_api][api6])
 
