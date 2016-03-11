@@ -8,55 +8,38 @@ import info.blockchain.api.HttpClient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * This class reflects the functionality documented at
- * https://blockchain.info/api/api_receive. It allows merchants to create forwarding
- * addresses and be notified upon payment.
- *
- * @deprecated Since there is a new Receive Payments API, this class is deprecated. Use ReceiveV2 instead.
+ * This class reflects the functionality necessary for using the receive-payments-api v2.
+ * Passing on a xPUB, callbackUrl and the apiCode will return an address for receiving a payment.
+ * <p>
+ * Upon receiving a payment on this address, the merchant will be notified using the callback URL.
  */
-@Deprecated
 public class Receive {
-    /**
-     * Calls the 'api/receive' endpoint and creates a forwarding address.
-     *
-     * @param receivingAddress Destination address where the payment should be sent
-     * @param callbackUrl      Callback URI that will be called upon payment
-     * @return An instance of the ReceiveResponse class
-     * @throws APIException If the server returns an error
-     * @deprecated Use ReceiveV2.receive(..) instead
-     */
-    @Deprecated
-    public static ReceiveResponse receive (String receivingAddress, String callbackUrl) throws APIException, IOException {
-        return receive(receivingAddress, callbackUrl, null);
-    }
 
     /**
-     * Calls the 'api/receive' endpoint and creates a forwarding address.
+     * Calls the receive-payments-api v2 and returns an address for the payment.
      *
-     * @param receivingAddress Destination address where the payment should be sent
-     * @param callbackUrl      Callback URI that will be called upon payment
-     * @param apiCode          Blockchain.info API code (optional, nullable)
-     * @return An instance of the ReceiveResponse class
+     * @param xPUB        Destination address where the payment should be sent
+     * @param callbackUrl Callback URI that will be called upon payment
+     * @param apiCode     Blockchain.info API code for the receive-payments v2 API (different from normal API key)
+     * @return An instance of the ReceiveV2Response class
      * @throws APIException If the server returns an error
-     * @deprecated Use ReceiveV2.receive(..) instead
      */
-    @Deprecated
-    public static ReceiveResponse receive (String receivingAddress, String callbackUrl, String apiCode) throws APIException, IOException {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("address", receivingAddress);
-        params.put("callback", callbackUrl);
-        params.put("method", "create");
-
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
+    public static ReceiveResponse receive (String xPUB, String callbackUrl, String apiCode) throws APIException, IOException {
+        if (apiCode == null || Objects.equals(apiCode, "")) {
+            throw new APIException("No API Code provided..");
         }
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("xpub", xPUB);
+        params.put("callback", callbackUrl);
+        params.put("key", apiCode);
 
-        String response = HttpClient.getInstance().post("api/receive", params);
+        String response = HttpClient.getInstance().get("https://api.blockchain.info/", "v2/receive", params);
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(response).getAsJsonObject();
 
-        return new ReceiveResponse(obj.get("fee_percent").getAsInt(), obj.get("destination").getAsString(), obj.get("input_address").getAsString(), obj.get("callback_url").getAsString());
+        return new ReceiveResponse(obj.get("index").getAsInt(), obj.get("address").getAsString(), obj.get("callback").getAsString());
     }
 }

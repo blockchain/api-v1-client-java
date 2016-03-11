@@ -1,57 +1,36 @@
 package info.blockchain.api.receive;
 
 /**
- * This class is used as a response object to the `Receive.receive` method.
- *
- * @deprecated Since there is a new Receive Payments API, this class is deprecated. Use ReceiveV2Response instead.
+ * This class is used as a response object to the `ReceiveV2.receive` method.
  */
-@Deprecated
 public class ReceiveResponse {
-    private int feePercent;
-    private String destinationAddress;
-    private String inputAddress;
+    private int index;
+    private String receivingAddress;
     private String callbackUrl;
 
-    @Deprecated
-    public ReceiveResponse (int feePercent, String destinationAddress, String inputAddress, String callbackUrl) {
-        this.feePercent = feePercent;
-        this.destinationAddress = destinationAddress;
-        this.inputAddress = inputAddress;
+    public ReceiveResponse (int index, String receivingAddress, String callbackUrl) {
+        this.index = index;
+        this.receivingAddress = receivingAddress;
         this.callbackUrl = callbackUrl;
     }
 
     /**
-     * @return Forwarding fee
-     * @deprecated Use ReceiveV2Response instead..
+     * @return Index of the address in the account
      */
-    @Deprecated
-    public int getFeePercent () {
-        return feePercent;
+    public int getIndex () {
+        return index;
     }
 
     /**
-     * @return Destination address where the funds will be forwarded
-     * @deprecated Use ReceiveV2Response instead..
+     * @return Address to be displayed for the customer at checkout.
      */
-    @Deprecated
-    public String getDestinationAddress () {
-        return destinationAddress;
-    }
-
-    /**
-     * @return Input address where the funds should be sent
-     * @deprecated Use ReceiveV2Response instead..
-     */
-    @Deprecated
-    public String getInputAddress () {
-        return inputAddress;
+    public String getReceivingAddress () {
+        return receivingAddress;
     }
 
     /**
      * @return Callback URI that will be called upon payment
-     * @deprecated Use ReceiveV2Response instead..
      */
-    @Deprecated
     public String getCallbackUrl () {
         return callbackUrl;
     }
