@@ -13,7 +13,8 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {	
-    	ReceiveResponse response = ReceiveV2.receive("xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
+    	ReceiveV2Response response = ReceiveV2.receive(
+    	        "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8",
     			URLEncoder.encode("https://your.url.com?secret=foo", "UTF-8"),
     			"YOUR_API_CODE");
     	

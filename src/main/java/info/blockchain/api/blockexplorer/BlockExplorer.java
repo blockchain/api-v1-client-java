@@ -50,7 +50,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public Transaction getTransaction (String txHash) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawtx/" + txHash + "?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance().get("rawtx/" + txHash, buildBasicRequest());
         JsonObject txJson = new JsonParser().parse(response).getAsJsonObject();
         return new Transaction(txJson);
     }
@@ -74,7 +74,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public Block getBlock (String blockHash) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawblock/" + blockHash + "?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance().get("rawblock/" + blockHash, buildBasicRequest());
         JsonObject blockJson = new JsonParser().parse(response).getAsJsonObject();
         return new Block(blockJson);
     }
@@ -87,7 +87,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public Address getAddress (String address) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawaddr/" + address + "?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance().get("rawaddr/" + address, buildBasicRequest());
         JsonObject addrJson = new JsonParser().parse(response).getAsJsonObject();
         return new Address(addrJson);
     }
@@ -103,13 +103,7 @@ public class BlockExplorer {
     public List<Block> getBlocksAtHeight (long height) throws APIException, IOException {
         List<Block> blocks = new ArrayList<Block>();
 
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("format", "json");
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
-
-        String response = HttpClient.getInstance().get("block-height/" + height, params);
+        String response = HttpClient.getInstance().get("block-height/" + height, buildBasicRequest());
         JsonObject blocksJson = new JsonParser().parse(response).getAsJsonObject();
 
         for (JsonElement blockElem : blocksJson.get("blocks").getAsJsonArray()) {
@@ -129,11 +123,8 @@ public class BlockExplorer {
     public List<UnspentOutput> getUnspentOutputs (String address) throws APIException, IOException {
         List<UnspentOutput> outputs = new ArrayList<UnspentOutput>();
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = buildBasicRequest();
         params.put("active", address);
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
 
         String response = null;
         try {
@@ -164,7 +155,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public LatestBlock getLatestBlock () throws APIException, IOException {
-        String response = HttpClient.getInstance().get("latestblock?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance().get("latestblock", buildBasicRequest());
         JsonObject blockObj = new JsonParser().parse(response).getAsJsonObject();
         return new LatestBlock(blockObj);
     }
@@ -178,13 +169,7 @@ public class BlockExplorer {
     public List<Transaction> getUnconfirmedTransactions () throws APIException, IOException {
         List<Transaction> transactions = new ArrayList<Transaction>();
 
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("format", "json");
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
-
-        String response = HttpClient.getInstance().get("unconfirmed-transactions", params);
+        String response = HttpClient.getInstance().get("unconfirmed-transactions", buildBasicRequest());
         JsonObject txList = new JsonParser().parse(response).getAsJsonObject();
 
         for (JsonElement txElem : txList.get("txs").getAsJsonArray()) {
@@ -227,13 +212,7 @@ public class BlockExplorer {
         List<SimpleBlock> blocks = new ArrayList<SimpleBlock>();
         poolName = poolName == null ? "" : poolName;
 
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("format", "json");
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
-
-        String response = HttpClient.getInstance().get("blocks/" + poolName, params);
+        String response = HttpClient.getInstance().get("blocks/" + poolName, buildBasicRequest());
         JsonObject blockList = new JsonParser().parse(response).getAsJsonObject();
 
         for (JsonElement blockElem : blockList.get("blocks").getAsJsonArray()) {
@@ -251,14 +230,19 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public InventoryData getInventoryData (String hash) throws APIException, IOException {
+        String response = HttpClient.getInstance().get("inv/" + hash, buildBasicRequest());
+        JsonObject invObj = new JsonParser().parse(response).getAsJsonObject();
+        return new InventoryData(invObj);
+    }
+
+    private Map<String, String> buildBasicRequest () {
         Map<String, String> params = new HashMap<String, String>();
+
         params.put("format", "json");
         if (apiCode != null) {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("inv/" + hash, params);
-        JsonObject invObj = new JsonParser().parse(response).getAsJsonObject();
-        return new InventoryData(invObj);
-    }
+        return params;
+  }
 }

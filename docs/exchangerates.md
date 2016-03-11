@@ -14,11 +14,11 @@ public class App
     public static void main(String[] args) throws Exception
     {	
 		// get the ticker map
-    	Map<String, Currency> ticker = ExchangeRates.getTicker();
-    	double BTCUSDsell = ticker.get("USD").getSell();
-    	
-		// convert 5362 EUR to BTC
-    	double EURToBTC = ExchangeRates.toBTC("EUR", 5362);
+        Map<String, Currency> ticker = ExchangeRates.getTicker();
+        BigDecimal BTCUSDsell = ticker.get("USD").getSell();
+
+        // convert 5362 EUR to BTC
+        BigDecimal EURToBTC = ExchangeRates.toBTC("EUR", new BigDecimal(53620));
     }
 }
 
