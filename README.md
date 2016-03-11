@@ -12,7 +12,56 @@ $ cd api-v1-client-java
 $ mvn install
 ```
 
-Note that the above procedures require Maven. If you do not wish to use Maven, please compile the source manually.
+We also provide a snapshot Maven repository for users who prefer managing dependencies that way.
+
+Add the following to your pom.xml:
+```xml
+<project>
+    ...
+    <repositories>
+        ...
+        <repository>
+            <id>api-v1-client-java-mvn-repo</id>
+            <url>https://raw.githubusercontent.com/blockchain/api-v1-client-java/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+  	        <groupId>info.blockchain</groupId>
+  	        <artifactId>api</artifactId>
+  	        <version>LATEST</version> <!-- for a specific version see the list of tags -->
+        </dependency>
+    <dependencies>
+    ...
+</project>
+```
+
+The above Maven repository also works with Gradle.
+
+Add this to your `build.gradle`:
+```
+...
+repositories {
+    ...
+    maven {
+        url = 'https://raw.githubusercontent.com/blockchain/api-v1-client-java/mvn-repo'
+    }
+}
+...
+dependencies {
+    ...
+    compile 'info.blockchain:api:1.0.3'
+}
+...
+```
+
+Note that the above procedures require Maven or Gradle. If you do not wish to use Maven or Gradle, please compile the source manually.
 
 The library consists of the following packages:
 
@@ -20,6 +69,7 @@ The library consists of the following packages:
 * `info.blockchain.api.createwallet` ([docs](docs/createwallet.md)) ([api/create_wallet][api2])
 * `info.blockchain.api.exchangerates` ([docs](docs/exchangerates.md)) ([api/exchange\_rates\_api][api3])
 * `info.blockchain.api.pushtx` ([docs](docs/pushtx.md)) ([pushtx][api7])
+* `info.blockchain.api.receive` ([docs](docs/receive.md)) ([api/api_receive][api4]) *Deprecated*
 * `info.blockchain.api.receive2` ([docs](docs/receive2.md)) ([api/api_receive][api4])
 * `info.blockchain.api.statistics` ([docs](docs/statistics.md)) ([api/charts_api][api5])
 * `info.blockchain.api.wallet` ([docs](docs/wallet.md)) ([api/blockchain\_wallet\_api][api6])
