@@ -89,6 +89,8 @@
           <noJekyll>true</noJekyll>
           <!-- matches distribution management repository url above -->
           <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+          <!-- Keep older versions around -->
+          <path>${project.version}</path>
           <!-- remote branch name -->
           <branch>refs/heads/mvn-repo</branch>
           <includes><include>**/*</include></includes>
