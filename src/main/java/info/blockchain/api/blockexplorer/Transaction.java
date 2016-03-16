@@ -13,6 +13,7 @@ public class Transaction {
     private boolean doubleSpend;
     private long blockHeight;
     private long time;
+    private long lockTime;
     private String relayedBy;
     private String hash;
     private long index;
@@ -21,10 +22,12 @@ public class Transaction {
     private List<Input> inputs;
     private List<Output> outputs;
 
-    public Transaction (boolean doubleSpend, long blockHeight, long time, String relayedBy, String hash, long index, int version, long size, List<Input> inputs, List<Output> outputs) {
+    public Transaction (boolean doubleSpend, long blockHeight, long time, long lockTime, String relayedBy,
+        String hash, long index, int version, long size, List<Input> inputs, List<Output> outputs) {
         this.doubleSpend = doubleSpend;
         this.blockHeight = blockHeight;
         this.time = time;
+        this.lockTime = lockTime;
         this.relayedBy = relayedBy;
         this.hash = hash;
         this.index = index;
@@ -35,11 +38,14 @@ public class Transaction {
     }
 
     public Transaction (JsonObject t) {
-        this(t, t.has("block_height") ? t.get("block_height").getAsLong() : -1, t.has("double_spend") ? t.get("double_spend").getAsBoolean() : false);
+        this(t, t.has("block_height") ? t.get("block_height").getAsLong() : -1,
+            t.has("double_spend") ? t.get("double_spend").getAsBoolean() : false);
     }
 
     public Transaction (JsonObject t, long blockHeight, boolean doubleSpend) {
-        this(doubleSpend, blockHeight, t.get("time").getAsLong(), t.get("relayed_by").getAsString(), t.get("hash").getAsString(), t.get("tx_index").getAsLong(), t.get("ver").getAsInt(), t.get("size").getAsLong(), null, null);
+        this(doubleSpend, blockHeight, t.get("time").getAsLong(), t.get("lock_time").getAsLong(),
+            t.get("relayed_by").getAsString(), t.get("hash").getAsString(), t.get("tx_index").getAsLong(),
+            t.get("ver").getAsInt(), t.get("size").getAsLong(), null, null);
 
         inputs = new ArrayList<Input>();
         for (JsonElement inputElem : t.get("inputs").getAsJsonArray()) {
@@ -112,6 +118,13 @@ public class Transaction {
      */
     public long getTime () {
         return time;
+    }
+
+    /**
+     * @return Locktime of the transaction
+     */
+    public long getLockTime () {
+        return lockTime;
     }
 
     /**
