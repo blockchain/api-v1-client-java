@@ -91,6 +91,7 @@
           <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
           <!-- Keep older versions around -->
           <path>${project.version}</path>
+          <merge>true</merge>
           <!-- remote branch name -->
           <branch>refs/heads/mvn-repo</branch>
           <includes><include>**/*</include></includes>
