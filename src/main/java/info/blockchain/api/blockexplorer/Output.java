@@ -43,6 +43,10 @@ public class Output {
         if (txIndex != output.txIndex) {
             return false;
         }
+        if (n != output.n) {
+          return false;
+        }
+        
         return !(script != null ? !script.equals(output.script) : output.script != null);
 
     }
@@ -51,6 +55,7 @@ public class Output {
     public int hashCode () {
         int result = (int) (value ^ (value >>> 32));
         result = 31 * result + (int) (txIndex ^ (txIndex >>> 32));
+        result = 31 * result + (int) (n ^ (n >>> 32));
         result = 31 * result + (script != null ? script.hashCode() : 0);
         return result;
     }

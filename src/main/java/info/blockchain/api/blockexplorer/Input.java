@@ -61,11 +61,16 @@ public class Input {
         if (sequence != input.sequence) {
             return false;
         }
-        if (!previousOutput.equals(input.previousOutput)) {
-            return false;
+        if (previousOutput != input.previousOutput) {
+          return false;
         }
+        if (previousOutput != null) {
+          if (!previousOutput.equals(input.previousOutput)) {
+            return false;
+          }
+        }
+        
         return scriptSignature.equals(input.scriptSignature);
-
     }
 
     @Override
