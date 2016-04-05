@@ -61,13 +61,13 @@ public class Input {
         if (sequence != input.sequence) {
             return false;
         }
-        if (previousOutput != input.previousOutput) {
-          return false;
+        if (previousOutput == null) {
+            if (input.previousOutput != null) {
+                return false;
+            }
         }
-        if (previousOutput != null) {
-          if (!previousOutput.equals(input.previousOutput)) {
+        else if (!previousOutput.equals(input.previousOutput)) {
             return false;
-          }
         }
         
         return scriptSignature.equals(input.scriptSignature);
