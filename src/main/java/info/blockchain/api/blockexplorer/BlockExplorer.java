@@ -5,12 +5,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import info.blockchain.api.APIException;
 import info.blockchain.api.HttpClient;
+import info.blockchain.api.blockexplorer.entity.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The BlockExplorer class reflects the functionality documented at
@@ -18,7 +17,7 @@ import java.util.Map;
  * fetch block, transaction and address data, get unspent outputs for an address etc.
  */
 public class BlockExplorer {
-    private String apiCode;
+    private final String apiCode;
 
     public BlockExplorer () {
         this(null);
@@ -37,7 +36,9 @@ public class BlockExplorer {
      * @param txIndex Transaction index
      * @return An instance of the {@link Transaction} class
      * @throws APIException If the server returns an error
+     * @deprecated As of 1.1.5, will be removed in future releases
      */
+    @Deprecated
     public Transaction getTransaction (long txIndex) throws APIException, IOException {
         return getTransaction(String.valueOf(txIndex));
     }
@@ -61,7 +62,9 @@ public class BlockExplorer {
      * @param blockIndex Block index
      * @return An instance of the {@link Block} class
      * @throws APIException If the server returns an error
+     * @deprecated As of 1.1.5, will be removed in future releases
      */
+    @Deprecated
     public Block getBlock (long blockIndex) throws APIException, IOException {
         return getBlock(String.valueOf(blockIndex));
     }
@@ -83,13 +86,38 @@ public class BlockExplorer {
      * Gets data for a single address.
      *
      * @param address Base58check or hash160 address string
+     * @param filter the filter for transactions selection, use null to indicate default
+     * @param limit an integer to limit number of transactions to display, use null to indicate default
+     * @param offset an integer to set number of transactions to skip when fetch, use null to indicate default
+     * @return An instance of the {@link Address} class
+     * @throws APIException If the server returns an error
+     */
+    public Address getAddress (String address, FilterType filter, Integer limit, Integer offset) throws APIException, IOException {
+        Map<String, String> params = buildBasicRequest();
+        if (filter != null) {
+            params.put("filter", filter.getFilterInt().toString());
+        }
+        if (limit != null) {
+            params.put("limit", limit.toString());
+        }
+        if (offset != null) {
+            params.put("offset", offset.toString());
+        }
+        String response = HttpClient.getInstance().get("rawaddr/" + address, params);
+        JsonObject addrJson = new JsonParser().parse(response).getAsJsonObject();
+
+        return new Address(addrJson);
+    }
+
+    /**
+     * Gets data for a single address.
+     *
+     * @param address Base58check or hash160 address string
      * @return An instance of the {@link Address} class
      * @throws APIException If the server returns an error
      */
     public Address getAddress (String address) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawaddr/" + address, buildBasicRequest());
-        JsonObject addrJson = new JsonParser().parse(response).getAsJsonObject();
-        return new Address(addrJson);
+        return getAddress(address, null, null, null);
     }
 
     /**
@@ -114,6 +142,37 @@ public class BlockExplorer {
     }
 
     /**
+     * Returns list of unspent outputs.
+     *
+     * @param addressList a list of Base58 or xpub addresses
+     * @param confirms an integer for minimum confirms of the outputs, use null to indicate default
+     * @param limit an integer to limit number of transactions to display, use null to indicate default
+     * @return A list of unspent outputs for the specified address
+     * @throws APIException If the server returns an error
+     */
+    public List<UnspentOutput> getUnspentOutputs (List<String> addressList, Integer confirms, Integer limit) throws APIException, IOException {
+        List<UnspentOutput> outputs = new ArrayList<UnspentOutput>();
+
+        Map<String, String> params = buildBasicRequest();
+        String pipedAddresses = StringUtils.join(addressList, "|");
+        params.put("active", pipedAddresses);
+        if (confirms != null) {
+            params.put("confirmations", confirms.toString());
+        }
+        if (limit != null) {
+            params.put("limit", limit.toString());
+        }
+
+        String response = HttpClient.getInstance().get("unspent", params);
+        JsonObject outsJson = new JsonParser().parse(response).getAsJsonObject();
+        for (JsonElement outElem : outsJson.get("unspent_outputs").getAsJsonArray()) {
+            outputs.add(new UnspentOutput(outElem.getAsJsonObject()));
+        }
+
+        return outputs;
+    }
+
+    /**
      * Gets unspent outputs for a single address.
      *
      * @param address Base58check or hash160 address string
@@ -121,31 +180,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public List<UnspentOutput> getUnspentOutputs (String address) throws APIException, IOException {
-        List<UnspentOutput> outputs = new ArrayList<UnspentOutput>();
-
-        Map<String, String> params = buildBasicRequest();
-        params.put("active", address);
-
-        String response = null;
-        try {
-            response = HttpClient.getInstance().get("unspent", params);
-        } catch (APIException e) {
-            // the API isn't supposed to return an error code here. No free outputs is
-            // a legitimate situation. We are circumventing that by returning an empty list
-            if (e.getMessage().equals("No free outputs to spend")) {
-                return outputs;
-            } else {
-                throw e;
-            }
-        }
-
-        JsonObject outsJson = new JsonParser().parse(response).getAsJsonObject();
-
-        for (JsonElement outElem : outsJson.get("unspent_outputs").getAsJsonArray()) {
-            outputs.add(new UnspentOutput(outElem.getAsJsonObject()));
-        }
-
-        return outputs;
+        return getUnspentOutputs(Arrays.asList(address), null, null);
     }
 
     /**
@@ -223,16 +258,75 @@ public class BlockExplorer {
     }
 
     /**
-     * Gets inventory data for an object.
+     * Returns the address balance summary for each address provided
      *
-     * @param hash Object hash
-     * @return An instance of the {@link InventoryData} class
+     * @param addressList base58 or xpub addresses
+     * @param filter the filter for transactions selection, use null to indicate default
+     * @return a map of (address, {@link Balance})
+     */
+    public Map<String, Balance> getBalance(List<String> addressList, FilterType filter) throws APIException, IOException {
+        Map<String, String> params = buildBasicRequest();
+        String pipedAddresses = StringUtils.join(addressList, "|");
+        params.put("active", pipedAddresses);
+        if (filter != null) {
+            params.put("filter", filter.getFilterInt().toString());
+        }
+
+        String response = HttpClient.getInstance().get("balance", params);
+        JsonObject balanceMap = new JsonParser().parse(response).getAsJsonObject();
+
+        Map<String, Balance> balances = new HashMap<String, Balance>();
+        for (String address : addressList) {
+            JsonObject balance = balanceMap.getAsJsonObject(address);
+            balances.put(address, new Balance(balance));
+        }
+
+        return balances;
+    }
+
+    /**
+     * Returns an aggregated summary on all addresses provided.
+     *
+     * @param addressList a list of Base58 or xpub addresses
+     * @param filter the filter for transactions selection, use null to indicate default
+     * @param limit an integer to limit number of transactions to display, use null to indicate default
+     * @param offset an integer to set number of transactions to skip when fetch, use null to indicate default
+     * @return An instance of the {@link MultiAddress} class
      * @throws APIException If the server returns an error
      */
-    public InventoryData getInventoryData (String hash) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("inv/" + hash, buildBasicRequest());
-        JsonObject invObj = new JsonParser().parse(response).getAsJsonObject();
-        return new InventoryData(invObj);
+    public MultiAddress getMultiAddress(List<String> addressList, FilterType filter, Integer limit, Integer offset) throws APIException, IOException {
+        Map<String, String> params = buildBasicRequest();
+        String pipedAddresses = StringUtils.join(addressList, "|");
+        params.put("active", pipedAddresses);
+        if (filter != null) {
+            params.put("filter", filter.getFilterInt().toString());
+        }
+        if (limit != null) {
+            params.put("n", limit.toString());
+        }
+        if (offset != null) {
+            params.put("offset", offset.toString());
+        }
+
+        String response = HttpClient.getInstance().get("multiaddr", params);
+        JsonObject addrJson = new JsonParser().parse(response).getAsJsonObject();
+
+        return new MultiAddress(addrJson);
+    }
+
+    /**
+     * Returns xpub summary on a xpub provided, with its overall balance and its transactions.
+     *
+     * @param xpub a xpub address
+     * @param filter the filter for transactions selection, use null to indicate default
+     * @param limit an integer to limit number of transactions to display, use null to indicate default
+     * @param offset an integer to set number of transactions to skip when fetch
+     * @return {@link XpubFull} an object to represent the xpub summary
+     */
+    public XpubFull getXpub(String xpub, FilterType filter, Integer limit, Integer offset) throws APIException, IOException {
+        MultiAddress multiAddress = getMultiAddress(Arrays.asList(xpub), filter, limit, offset);
+
+        return new XpubFull(multiAddress.getAddresses().get(0), multiAddress.getTxs());
     }
 
     private Map<String, String> buildBasicRequest () {

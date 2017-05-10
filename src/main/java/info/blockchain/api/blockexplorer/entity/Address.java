@@ -1,4 +1,4 @@
-package info.blockchain.api.blockexplorer;
+package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -15,14 +15,16 @@ public class Address {
     private long totalReceived;
     private long totalSent;
     private long finalBalance;
+    private int txCount;
     private List<Transaction> transactions;
 
-    public Address (String hash160, String address, long totalReceived, long totalSent, long finalBalance, List<Transaction> transactions) {
+    public Address (String hash160, String address, long totalReceived, long totalSent, long finalBalance, int txCount, List<Transaction> transactions) {
         this.hash160 = hash160;
         this.address = address;
         this.totalReceived = totalReceived;
         this.totalSent = totalSent;
         this.finalBalance = finalBalance;
+        this.txCount = txCount;
         this.transactions = transactions;
     }
 
@@ -34,6 +36,7 @@ public class Address {
                 a.has("total_received") ? a.get("total_received").getAsLong() : 0,
                 a.has("total_sent") ? a.get("total_sent").getAsLong() : 0,
                 a.has("final_balance") ? a.get("final_balance").getAsLong() : 0,
+                a.has("n_tx") ? a.get("n_tx").getAsInt() : 0,
                 null);
 
         transactions = new ArrayList<Transaction>();
@@ -113,6 +116,13 @@ public class Address {
      */
     public long getFinalBalance () {
         return finalBalance;
+    }
+
+    /**
+     * @return Original number of transactions before filtering and limiting
+     */
+    public int getTxCount () {
+        return txCount;
     }
 
     /**
