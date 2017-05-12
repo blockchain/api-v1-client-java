@@ -14,6 +14,9 @@ import com.google.gson.JsonParser;
 
 import info.blockchain.api.APIException;
 import info.blockchain.api.HttpClient;
+import info.blockchain.api.wallet.entity.Address;
+import info.blockchain.api.wallet.entity.CreateWalletResponse;
+import info.blockchain.api.wallet.entity.PaymentResponse;
 
 /**
  * This class reflects the functionality documented
@@ -29,6 +32,58 @@ public class Wallet {
     private String password;
     private String secondPassword;
     private String apiCode;
+
+    /**
+     * Creates a new Blockchain.info wallet.
+     *
+     * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
+     * @param password Password for the new wallet. At least 10 characters.
+     * @param apiCode  API code with create wallets permission
+     * @return An instance of the CreateWalletResponse class
+     * @throws APIException If the server returns an error
+     */
+    public static CreateWalletResponse create (String serviceURL, String password,
+                                               String apiCode) throws IOException, APIException {
+        return create(serviceURL, password, apiCode, null, null, null);
+    }
+
+    /**
+     * Creates a new Blockchain.info wallet. It can be created containing a pre-generated
+     * private key or will otherwise generate a new private key.
+     *
+     * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
+     * @param password   Password for the new wallet. At least 10 characters.
+     * @param apiCode    API code with create wallets permission
+     * @param privateKey Private key to add to the wallet (optional, nullable)
+     * @param label      Label for the first address in the wallet (optional, nullable)
+     * @param email      Email to associate with the new wallet (optional, nullable)
+     * @return An instance of the CreateWalletResponse class
+     * @throws APIException If the server returns an error
+     */
+    public static CreateWalletResponse create (String serviceURL, String password,String apiCode,
+                                               String privateKey, String label, String email) throws IOException, APIException {
+        Map<String, String> params = new HashMap<String, String>();
+
+        params.put("password", password);
+        params.put("api_code", apiCode);
+        if (privateKey != null) {
+            params.put("priv", privateKey);
+        }
+        if (label != null) {
+            params.put("label", label);
+        }
+        if (email != null) {
+            params.put("email", email);
+        }
+
+        String response = HttpClient.getInstance().post(serviceURL, "api/v2/create", params);
+        JsonObject jsonObj = new JsonParser().parse(response).getAsJsonObject();
+
+        return new CreateWalletResponse(
+                jsonObj.get("guid").getAsString(),
+                jsonObj.get("address").getAsString(),
+                jsonObj.get("label").getAsString());
+    }
 
     /**
      * @param serviceURL URL to an instance of service-my-wallet-v3 (with trailing slash)
@@ -56,25 +111,6 @@ public class Wallet {
         this.jsonParser = new JsonParser();
     }
 
-    @Override
-    public boolean equals (Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Wallet wallet = (Wallet) o;
-
-        return identifier == null ? wallet.identifier == null : identifier.equals(wallet.identifier);
-    }
-
-    @Override
-    public int hashCode () {
-        return identifier != null ? identifier.hashCode() : 0;
-    }
-
     /**
      * Sends bitcoin from your wallet to a single address.
      *
@@ -82,15 +118,14 @@ public class Wallet {
      * @param amount      Amount to send (in satoshi)
      * @param fromAddress Specific address to send from (optional, nullable)
      * @param fee         Transaction fee in satoshi. Must be greater than the default fee (optional, nullable).
-     * @param note        Public note to include with the transaction (optional, nullable)
      * @return An instance of the PaymentResponse class
      * @throws APIException If the server returns an error
      */
-    public PaymentResponse send (String toAddress, long amount, String fromAddress, Long fee, String note) throws APIException, IOException {
+    public PaymentResponse send (String toAddress, long amount, String fromAddress, Long fee) throws APIException, IOException {
         Map<String, Long> recipient = new HashMap<String, Long>();
         recipient.put(toAddress, amount);
 
-        return sendMany(recipient, fromAddress, fee, note);
+        return sendMany(recipient, fromAddress, fee);
     }
 
     /**
@@ -99,13 +134,12 @@ public class Wallet {
      * @param recipients  Map with the structure of 'address':amount in satoshi (String:long)
      * @param fromAddress Specific address to send from (optional, nullable)
      * @param fee         Transaction fee in satoshi. Must be greater than the default fee (optional, nullable).
-     * @param note        Public note to include with the transaction (optional, nullable)
      * @return An instance of the PaymentResponse class
      * @throws APIException If the server returns an error
      * @throws IllegalArgumentException If no recipients is null or empty
      */
-    public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, String note) throws APIException, IOException {
-        Map<String, String> params = buildBasicRequest();
+    public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee) throws APIException, IOException {
+        Map<String, String> params = buildBasicRequestWithSecondPassword();
         String method = null;
 
        if (recipients.size() == 1) {
@@ -123,9 +157,6 @@ public class Wallet {
         }
         if (fee != null) {
             params.put("fee", fee.toString());
-        }
-        if (note != null) {
-            params.put("note", note);
         }
 
         String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/%s", identifier, method), params);
@@ -151,14 +182,11 @@ public class Wallet {
     /**
      * Lists all active addresses in the wallet.
      *
-     * @param confirmations Minimum number of confirmations transactions
-     *                      must have before being included in the balance of addresses (can be 0)
      * @return A list of Address objects
      * @throws APIException If the server returns an error
      */
-    public List<Address> listAddresses (int confirmations) throws APIException, IOException {
+    public List<Address> listAddresses () throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
-        params.put("confirmations", String.valueOf(confirmations));
 
         String response = HttpClient.getInstance().get(serviceURL, String.format("merchant/%s/list", identifier), params);
         JsonObject topElem = parseResponse(response);
@@ -178,15 +206,12 @@ public class Wallet {
      * Retrieves an address from the wallet.
      *
      * @param address       Address in the wallet to look up
-     * @param confirmations Minimum number of confirmations transactions
-     *                      must have before being included in the balance of an addresses (can be 0)
      * @return An instance of the Address class
      * @throws APIException If the server returns an error
      */
-    public Address getAddress (String address, int confirmations) throws APIException, IOException {
+    public Address getAddress (String address) throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
         params.put("address", address);
-        params.put("confirmations", String.valueOf(confirmations));
 
         String response = HttpClient.getInstance().get(serviceURL, String.format("merchant/%s/address_balance", identifier), params);
         JsonObject topElem = parseResponse(response);
@@ -247,38 +272,21 @@ public class Wallet {
         return topElem.get("active").getAsString();
     }
 
-    /**
-     * Consolidates the wallet addresses.
-     *
-     * @param days Addresses which have not received any
-     *             transactions in at least this many days will be consolidated.
-     * @return A list of consolidated addresses in the string format
-     * @throws APIException If the server returns an error
-     */
-    public List<String> consolidate (int days) throws APIException, IOException {
-        Map<String, String> params = buildBasicRequest();
-        params.put("days", String.valueOf(days));
-
-        String response = HttpClient.getInstance().post(serviceURL, String.format("merchant/%s/auto_consolidate", identifier), params);
-        JsonObject topElem = parseResponse(response);
-
-        List<String> addresses = new ArrayList<String>();
-        for (JsonElement jAddr : topElem.get("consolidated").getAsJsonArray()) {
-            addresses.add(jAddr.getAsString());
-        }
-
-        return addresses;
-    }
-
     private Map<String, String> buildBasicRequest () {
         Map<String, String> params = new HashMap<String, String>();
 
         params.put("password", password);
-        if (secondPassword != null) {
-            params.put("second_password", secondPassword);
-        }
         if (apiCode != null) {
             params.put("api_code", apiCode);
+        }
+
+        return params;
+    }
+
+    private Map<String, String> buildBasicRequestWithSecondPassword () {
+        Map<String, String> params = buildBasicRequest();
+        if (secondPassword != null) {
+            params.put("second_password", secondPassword);
         }
 
         return params;
@@ -292,4 +300,24 @@ public class Wallet {
 
         return topElem;
     }
+
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Wallet wallet = (Wallet) o;
+
+        return identifier == null ? wallet.identifier == null : identifier.equals(wallet.identifier);
+    }
+
+    @Override
+    public int hashCode () {
+        return identifier != null ? identifier.hashCode() : 0;
+    }
+
 }

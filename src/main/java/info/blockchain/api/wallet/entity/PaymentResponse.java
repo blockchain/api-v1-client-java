@@ -1,4 +1,4 @@
-package info.blockchain.api.wallet;
+package info.blockchain.api.wallet.entity;
 
 /**
  * Used in response to the `send` and `sendMany` methods in the `Wallet` class.
