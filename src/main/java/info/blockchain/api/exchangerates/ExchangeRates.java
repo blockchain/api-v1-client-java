@@ -18,26 +18,25 @@ import java.util.Map.Entry;
  * ticker data and convert amounts between BTC and fiat currencies.
  */
 public class ExchangeRates {
-    /**
-     * Gets the price ticker from https://blockchain.info/ticker
-     *
-     * @return A map of currencies where the key is a 3-letter currency symbol and the
-     * value is the `Currency` class
-     * @throws APIException If the server returns an error
-     */
-    public static Map<String, Currency> getTicker () throws APIException, IOException {
-        return getTicker(null);
+
+    private final String apiCode;
+
+    public ExchangeRates () {
+        this(null);
+    }
+
+    public ExchangeRates (String apiCode) {
+        this.apiCode = apiCode;
     }
 
     /**
      * Gets the price ticker from https://blockchain.info/ticker
      *
-     * @param apiCode Blockchain.info API code (optional, nullable)
      * @return A map of currencies where the key is a 3-letter currency symbol and the
      * value is the `Currency` class
      * @throws APIException If the server returns an error
      */
-    public static Map<String, Currency> getTicker (String apiCode) throws APIException, IOException {
+    public Map<String, Currency> getTicker () throws APIException, IOException {
         Map<String, String> params = new HashMap<String, String>();
         if (apiCode != null) {
             params.put("api_code", apiCode);
@@ -65,20 +64,7 @@ public class ExchangeRates {
      * @return Converted value in BTC
      * @throws APIException If the server returns an error
      */
-    public static BigDecimal toBTC (String currency, BigDecimal value) throws APIException, IOException {
-        return toBTC(currency, value, null);
-    }
-
-    /**
-     * Converts x value in the provided currency to BTC.
-     *
-     * @param currency Currency code
-     * @param value    Value to convert
-     * @param apiCode  Blockchain.info API code (optional, nullable)
-     * @return Converted value in BTC
-     * @throws APIException If the server returns an error
-     */
-    public static BigDecimal toBTC (String currency, BigDecimal value, String apiCode) throws APIException, IOException {
+    public BigDecimal toBTC (String currency, BigDecimal value) throws APIException, IOException {
         Map<String, String> params = new HashMap<String, String>();
         params.put("currency", currency);
         params.put("value", String.valueOf(value));
@@ -89,4 +75,25 @@ public class ExchangeRates {
         String response = HttpClient.getInstance().get("tobtc", params);
         return new BigDecimal(response);
     }
+
+    /**
+     * Converts x value in BTC to the provided currency.
+     *
+     * @param currency Currency code
+     * @param value    Value to convert
+     * @return Converted value in the provided currency
+     * @throws APIException If the server returns an error
+     */
+    public BigDecimal toFiat (String currency, BigDecimal value) throws APIException, IOException {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("currency", currency);
+        params.put("value", String.valueOf(value.multiply(BigDecimal.valueOf(100000000L)))); // The endpoint is expecting satoshi
+        if (apiCode != null) {
+            params.put("api_code", apiCode);
+        }
+
+        String response = HttpClient.getInstance().get("frombtc", params);
+        return new BigDecimal(response);
+    }
+
 }
