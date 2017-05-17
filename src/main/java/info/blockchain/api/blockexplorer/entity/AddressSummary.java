@@ -13,8 +13,8 @@ public class AddressSummary {
     private int accountIndex;
     private int gapLimit;
 
-    public AddressSummary (String address, int txCount, long totalReceived, long totalSent, long finalBalance, int changeIndex, int accountIndex, int
-            gapLimit) {
+    public AddressSummary (String address, int txCount, long totalReceived, long totalSent, long finalBalance,
+                           int changeIndex, int accountIndex, int gapLimit) {
         this.address = address;
         this.txCount = txCount;
         this.totalReceived = totalReceived;
