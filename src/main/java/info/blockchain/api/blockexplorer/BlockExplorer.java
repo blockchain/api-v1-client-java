@@ -163,7 +163,16 @@ public class BlockExplorer {
             params.put("limit", limit.toString());
         }
 
-        String response = HttpClient.getInstance().get("unspent", params);
+        String response = null;
+        try {
+            response = HttpClient.getInstance().get("unspent", params);
+        } catch (APIException e) {
+            // The server endpoint will return error if no output, however this should be a valid situation so we return an empty result.
+            if (e.getMessage().equals("No free outputs to spend")) {
+                return outputs;
+            }
+        }
+
         JsonObject outsJson = new JsonParser().parse(response).getAsJsonObject();
         for (JsonElement outElem : outsJson.get("unspent_outputs").getAsJsonArray()) {
             outputs.add(new UnspentOutput(outElem.getAsJsonObject()));
