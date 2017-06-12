@@ -1,4 +1,4 @@
-package info.blockchain.api.wallet;
+package info.blockchain.api.wallet.entity;
 
 /**
  * Used in combination with the `Wallet` class

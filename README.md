@@ -1,4 +1,4 @@
-#Blockchain API library (Java, v1)
+#Blockchain API library (Java, v1.1.5)
 
 An official Java library for interacting with the Blockchain.info API (Java 1.6 required).
 
@@ -56,7 +56,7 @@ repositories {
 ...
 dependencies {
     ...
-    compile 'info.blockchain:api:1.1.4'
+    compile 'info.blockchain:api:1.1.5'
 }
 ...
 ```

@@ -1,4 +1,4 @@
-package info.blockchain.api.createwallet;
+package info.blockchain.api.wallet.entity;
 
 /**
  * Used in response to the `create` method in the `CreateWallet` class.

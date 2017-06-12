@@ -1,4 +1,4 @@
-package info.blockchain.api.blockexplorer;
+package info.blockchain.api.blockexplorer.entity;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
