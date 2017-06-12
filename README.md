@@ -1,8 +1,8 @@
-#Blockchain API library (Java, v1.1.5)
+# Blockchain API library (Java, v1.1.5)
 
 An official Java library for interacting with the Blockchain.info API (Java 1.6 required).
 
-###Getting started
+### Getting started
 
 If you prefer building from source:
 
@@ -75,11 +75,11 @@ The library consists of the following packages:
 
 In order to use `createwallet` and `wallet` you need to run an instance of [service-my-wallet-v3](https://github.com/blockchain/service-my-wallet-v3).
 
-###Error handling
+### Error handling
 
 All methods may throw exceptions caused by incorrectly passed parameters or other problems. If a call is rejected server-side, the `APIException` exception will be thrown. In case of a network error, the `IOException` exception will be thrown.
 
-###Connection timeouts
+### Connection timeouts
 
 It is possible to set arbitrary connection timeouts.
 
@@ -87,13 +87,13 @@ It is possible to set arbitrary connection timeouts.
 info.blockchain.api.HttpClient.TIMEOUT_MS = 2000; // time out after 2000 milliseconds
 ```
 
-###Request limits and API keys
+### Request limits and API keys
 
 In order to prevent abuse some API methods require an API key approved with some basic contact information and a description of its intended use. Please request an API key [here](https://blockchain.info/api/api_create_code).
 
 The same API key can be used to bypass the request limiter.
 
-###Code Coverage Report generation
+### Code Coverage Report generation
 
 To generate the code coverage report, execute the following command:
 ```sh

@@ -1,4 +1,4 @@
-##`info.blockchain.api.pushtx` package
+## `info.blockchain.api.pushtx` package
 
 The `pushtx` package contains the `PushTx` class that reflects the functionality provided at https://blockchain.info/pushtx . It allows users to broadcast hex encoded transactions to the bitcoin network.
 
@@ -9,7 +9,7 @@ Example usage:
 package test;
 import info.blockchain.api.pushtx.*;
 
-public class App 
+public class App
 {
     public static void main(String[] args) throws Exception
     {
