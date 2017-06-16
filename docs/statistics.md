@@ -13,12 +13,17 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {
-    	StatisticsResponse stats = Statistics.get();
-
+        Statistics stats = new Statistics();
+        
+    	StatisticsResponse stats = stats.get();
     	System.out.println(String.format("The current difficulty is %s. "
     			+ "The next retarget will happen in %s hours.",
     			stats.getDifficulty(),
     			(stats.getNextRetarget() - stats.getTotalBlocks()) * stats.getMinutesBetweenBlocks() / 60));
+    			
+        Chart txPerSec = stats.getChart("transactions-per-second", "5weeks", "8hours");
+        
+        Map<String, Integer> pools = stats.getPools("5weeks");
     }
 }
 

@@ -13,12 +13,18 @@ public class App
 {
     public static void main(String[] args) throws Exception
     {
+        // get the Exchange object
+        ExchangeRates exchange = new ExchangeRates();
+        
 		// get the ticker map
-        Map<String, Currency> ticker = ExchangeRates.getTicker();
+        Map<String, Currency> ticker = exchange.getTicker();
         BigDecimal BTCUSDsell = ticker.get("USD").getSell();
 
         // convert 5362 EUR to BTC
-        BigDecimal EURToBTC = ExchangeRates.toBTC("EUR", new BigDecimal(53620));
+        BigDecimal EURToBTC = exchange.toBTC("EUR", new BigDecimal(53620));
+        
+        // convert 100,000,000 satoshi to USD
+        BigDecimal BTCToUSD = exchange.toFiat("USD", new BigDecimal(100000000));
     }
 }
 

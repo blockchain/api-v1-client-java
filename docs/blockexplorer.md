@@ -30,6 +30,11 @@ public class App
     	// get an address and read its final balance
     	Address address = blockExplorer.getAddress("1EjmmDULiZT2GCbJSeXRbjbJVvAPYkSDBw");
     	long finalBalance = address.getFinalBalance();
+    	
+    	// get an address and read its final balance with filter, limit, and offset
+        Address address = client.getAddress("1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW", FilterType.All, 10, 5);    	
+        long finalBalance = address.getFinalBalance();
+
 
     	// get a list of currently unconfirmed transactions and print the relay IP address for each
     	List<Transaction> unconfirmedTxs = blockExplorer.getUnconfirmedTransactions();
@@ -42,9 +47,21 @@ public class App
     	for (UnspentOutput out : outs)
     		totalUnspentValue += out.getValue();
 
-    	// get inventory data for a recent transaction (valid up to one hour)
-    	InventoryData inv = blockExplorer.getInventoryData("f23ee3525f78df032b47c3c9be6cd0d930f38c32674e861c1e41c6558b32ee97");
-
+    	// calculate the balanace of an address by fetching a list of all its unspent outputs with confirmations and limit
+    	List<UnspentOutput> outs = blockExplorer.getUnspentOutputs(Arrays.asList("1EjmmDULiZT2GCbJSeXRbjbJVvAPYkSDBw"), 5, 10);
+    	long totalUnspentValue = 0;
+    	for (UnspentOutput out : outs)
+    		totalUnspentValue += out.getValue();
+    		
+    	// returns the address balance summary for each address provided
+    	Map<String, Balance> balances = blockExplorer.getBalance(Arrays.asList("1EjmmDULiZT2GCbJSeXRbjbJVvAPYkSDBw"), FilterType.All);
+    	
+    	// returns an aggregated summary on all addresses provided.
+    	MultiAddress multiAddr = blockExplorer.getMultiAddress(Arrays.asList("1EjmmDULiZT2GCbJSeXRbjbJVvAPYkSDBw"), FilterType.All, 10, 5);
+    	
+    	// returns xpub summary on a xpub provided, with its overall balance and its transactions.
+    	XpubFull xpub = blockExplorer.getXpub("xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn", FilterType.All, 10, 5);
+    	
     	// get the latest block on the main chain and read its height
     	LatestBlock latestBlock = blockExplorer.getLatestBlock();
     	long latestBlockHeight = latestBlock.getHeight();
