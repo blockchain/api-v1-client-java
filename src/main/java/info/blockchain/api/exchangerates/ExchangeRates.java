@@ -8,7 +8,12 @@ import info.blockchain.api.HttpClient;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -93,7 +98,10 @@ public class ExchangeRates {
         }
 
         String response = HttpClient.getInstance().get("frombtc", params);
-        return new BigDecimal(response);
+        DecimalFormat nf = (DecimalFormat)NumberFormat.getInstance(Locale.getDefault());
+        nf.setParseBigDecimal(true);
+
+        return (BigDecimal)nf.parse(response, new ParsePosition(0));
     }
 
 }
