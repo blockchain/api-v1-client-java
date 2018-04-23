@@ -1,7 +1,6 @@
 package info.blockchain.api.blockexplorer;
 
 import info.blockchain.api.blockexplorer.entity.*;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +16,8 @@ import static org.junit.Assert.*;
 public class BlockExplorerTest {
 
     BlockExplorer client;
+    private static final String address1 = "1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW";
+    private static final String address2 = "xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn";
 
     @Before
     public void setUp () throws Exception {
@@ -25,22 +26,20 @@ public class BlockExplorerTest {
 
     @Test
     public void getAddress () throws Exception {
-        Address address = client.getAddress("1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW", FilterType.All, 10, null);
+        Address address = client.getAddress(address1, FilterType.All, 10, null);
 
-        assertEquals("1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW", address.getAddress());
+        assertEquals(address1, address.getAddress());
         assertEquals("07feead7f9fb7d16a0251421ac9fa090169cc169",
                 address.getHash160());
-        assertEquals(0, address.getFinalBalance());
-        assertEquals(2, address.getTxCount());
-        assertEquals(20000, address.getTotalReceived());
-        assertEquals(20000, address.getTotalSent());
-        assertEquals(2, address.getTransactions().size());
+        assertEquals(137887, address.getFinalBalance());
+        assertEquals(15, address.getTxCount());
+        assertEquals(558123, address.getTotalReceived());
+        assertEquals(420236, address.getTotalSent());
+        assertEquals(10, address.getTransactions().size());
     }
 
     @Test
     public void getUnspentOutputs () throws Exception {
-        String address1 = "1FrWWFJ95Jq7EDgpkeBwVLAtoJMPwmYS7T";
-        String address2 = "xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn";
         List<UnspentOutput> unspentOutputs = client.getUnspentOutputs(Arrays.asList(address1, address2), 6, 10);
 
         assertTrue(unspentOutputs != null && unspentOutputs.size() != 0);
@@ -50,16 +49,13 @@ public class BlockExplorerTest {
 
     @Test
     public void getBalance () throws Exception {
-        String address1 = "1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW";
-        String address2 = "xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn";
-
         List<String> list = Arrays.asList(address1, address2);
 
         Map<String, Balance> balances = client.getBalance(list, FilterType.All);
 
-        assertEquals(0, balances.get(address1).getFinalBalance());
-        assertEquals(2, balances.get(address1).getTxCount());
-        assertEquals(20000, balances.get(address1).getTotalReceived());
+        assertEquals(137887, balances.get(address1).getFinalBalance());
+        assertEquals(15, balances.get(address1).getTxCount());
+        assertEquals(558123, balances.get(address1).getTotalReceived());
         assertEquals(20000, balances.get(address2).getFinalBalance());
         assertEquals(1, balances.get(address2).getTxCount());
         assertEquals(20000, balances.get(address2).getTotalReceived());
@@ -67,19 +63,17 @@ public class BlockExplorerTest {
 
     @Test
     public void getMultiAddress () throws Exception {
-        String address1 = "1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW";
-        String address2 = "xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn";
         List<String> list = Arrays.asList(address1, address2);
         MultiAddress multiAddress = client.getMultiAddress(list, FilterType.All, null, null);
 
         //Addresses
-        assertEquals("1jH7K4RJrQBXijtLj1JpzqPRhR7MdFtaW", multiAddress.getAddresses().get(0).getAddress());
-        assertEquals(2, multiAddress.getAddresses().get(0).getTxCount());
-        assertEquals(20000, multiAddress.getAddresses().get(0).getTotalReceived());
-        assertEquals(20000, multiAddress.getAddresses().get(0).getTotalSent());
-        assertEquals(0, multiAddress.getAddresses().get(0).getFinalBalance());
+        assertEquals(address1, multiAddress.getAddresses().get(0).getAddress());
+        assertEquals(15, multiAddress.getAddresses().get(0).getTxCount());
+        assertEquals(558123, multiAddress.getAddresses().get(0).getTotalReceived());
+        assertEquals(420236, multiAddress.getAddresses().get(0).getTotalSent());
+        assertEquals(137887, multiAddress.getAddresses().get(0).getFinalBalance());
 
-        assertEquals("xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn", multiAddress
+        assertEquals(address2, multiAddress
                         .getAddresses().get(1).getAddress());
         assertEquals(1, multiAddress.getAddresses().get(1).getTxCount());
         assertEquals(20000, multiAddress.getAddresses().get(1).getTotalReceived());
@@ -92,11 +86,9 @@ public class BlockExplorerTest {
 
     @Test
     public void getXpub () throws Exception {
-        String address = "xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn";
-        XpubFull xpub = client.getXpub(address, null, null, null);
+        XpubFull xpub = client.getXpub(address2, null, null, null);
 
-        assertEquals(xpub.getAddress(),
-                "xpub6CmZamQcHw2TPtbGmJNEvRgfhLwitarvzFn3fBYEEkFTqztus7W7CNbf48Kxuj1bRRBmZPzQocB6qar9ay6buVkQk73ftKE1z4tt9cPHWRn");
+        assertEquals(xpub.getAddress(), address2);
         assertEquals(1, xpub.getTxCount());
         assertEquals(20000, xpub.getTotalReceived());
         assertEquals(0, xpub.getTotalSent());
