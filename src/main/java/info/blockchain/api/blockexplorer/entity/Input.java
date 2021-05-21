@@ -18,7 +18,7 @@ public class Input {
     }
 
     public Input (JsonObject i) {
-        if (i.has("prev_out")) {
+        if (i.has("prev_out") && !i.get("prev_out").isJsonNull()) {
             this.previousOutput = new Output(i.get("prev_out").getAsJsonObject(), true);
         }
 
