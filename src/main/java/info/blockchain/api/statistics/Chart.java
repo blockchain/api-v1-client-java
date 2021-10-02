@@ -38,7 +38,7 @@ public class Chart {
 
     private List<Point> getPoints(JsonObject chartJson) {
         List<Point> points = new ArrayList<Point>();
-        for (JsonElement pointElement : chartJson.getAsJsonArray()) {
+        for (JsonElement pointElement : chartJson.getAsJsonArray("values")) {
             JsonObject pointJson = pointElement.getAsJsonObject();
             points.add(new Point(pointJson));
         }
